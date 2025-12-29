@@ -1,0 +1,140 @@
+.profile-container {
+  min-height: calc(100vh - 180px);
+}
+
+.header {
+  background: white;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.card {
+  border-radius: 10px;
+  border: none;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.card-header {
+  background-color: white;
+  border-bottom: 1px solid #eee;
+  font-weight: 600;
+  padding: 15px 20px;
+}
+
+.profile-avatar .avatar-circle {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 32px;
+  margin: 0 auto;
+}
+
+.profile-stats .stat-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid #f8f9fa;
+}
+
+.profile-stats .stat-item:last-child {
+  border-bottom: none;
+}
+
+.stat-label {
+  font-size: 14px;
+  color: #666;
+}
+
+.stat-value {
+  font-weight: 500;
+  color: #333;
+}
+
+.badge {
+  padding: 6px 10px;
+  font-weight: 500;
+  font-size: 12px;
+}
+
+.quick-actions .btn {
+  padding: 10px 15px;
+  text-align: left;
+}
+
+.system-info .info-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+}
+
+.system-info .info-item small {
+  font-size: 12px;
+}
+
+.form-label {
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.form-control {
+  padding: 10px 15px;
+  border: 2px solid #e0e0e0;
+  transition: all 0.3s;
+}
+
+.form-control:focus {
+  border-color: #1a73e8;
+  box-shadow: 0 0 0 0.2rem rgba(26, 115, 232, 0.25);
+}
+
+.form-control.is-invalid {
+  border-color: #dc3545;
+}
+
+.form-control:disabled {
+  background-color: #f8f9fa;
+  opacity: 0.7;
+}
+
+.invalid-feedback {
+  font-size: 14px;
+}
+
+.alert {
+  border-radius: 8px;
+  border: none;
+}
+
+.btn {
+  padding: 10px 24px;
+  font-weight: 500;
+}
+
+@media (max-width: 768px) {
+  .header {
+    padding: 15px;
+  }
+  
+  .profile-avatar .avatar-circle {
+    width: 80px;
+    height: 80px;
+    font-size: 24px;
+  }
+  
+  .quick-actions .btn {
+    font-size: 14px;
+  }
+  
+  .col-lg-8, .col-lg-4 {
+    margin-bottom: 20px;
+  }
+}

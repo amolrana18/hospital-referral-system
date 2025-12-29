@@ -1,0 +1,79 @@
+<div class="referral-form-container">
+  <div class="header mb-4">
+    <h2>New Patient Referral</h2>
+    <p class="text-muted">Refer a patient to another hospital</p>
+  </div>
+
+  <div class="card">
+    <div class="card-body">
+      <form [formGroup]="referralForm" (ngSubmit)="onSubmit()">
+        
+        <div *ngIf="success" class="alert alert-success">Referral created successfully!</div>
+        <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+
+        <!-- Patient Selection -->
+        <h6 class="mb-3 text-primary">Patient Information</h6>
+        <div class="mb-3">
+          <input type="text" [(ngModel)]="searchQuery" [ngModelOptions]="{standalone: true}"
+                 (keyup)="searchPatients()" class="form-control" placeholder="Search patient by name or phone">
+          <div *ngIf="patients.length > 0" class="search-results mt-2">
+            <div *ngFor="let patient of patients" class="list-group-item" (click)="selectPatient(patient)">
+              {{ patient.first_name }} {{ patient.last_name }} - {{ patient.phone_number }}
+            </div>
+          </div>
+        </div>
+
+        <!-- Hospital Selection -->
+        <h6 class="mb-3 text-primary">Receiving Hospital</h6>
+        <div class="mb-3">
+          <select formControlName="receiving_hospital_id" class="form-select">
+            <option value="">Select Hospital</option>
+            <option *ngFor="let hospital of hospitals" [value]="hospital.hospital_id">
+              {{ hospital.name }} - {{ hospital.district_name }}
+            </option>
+          </select>
+        </div>
+
+        <!-- Clinical Information -->
+        <h6 class="mb-3 text-primary">Clinical Information</h6>
+        <div class="mb-3">
+          <textarea formControlName="reason_for_referral" class="form-control" rows="3"
+                    placeholder="Reason for referral"></textarea>
+        </div>
+        <div class="mb-3">
+          <textarea formControlName="clinical_summary" class="form-control" rows="4"
+                    placeholder="Clinical summary"></textarea>
+        </div>
+
+        <!-- Priority -->
+        <h6 class="mb-3 text-primary">Priority</h6>
+        <div class="mb-3">
+          <div class="form-check">
+            <input class="form-check-input" type="radio" value="Low" formControlName="priority" id="priority_low">
+            <label class="form-check-label" for="priority_low">Low</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" value="Medium" formControlName="priority" id="priority_medium">
+            <label class="form-check-label" for="priority_medium">Medium</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" value="High" formControlName="priority" id="priority_high">
+            <label class="form-check-label" for="priority_high">High</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" value="Critical" formControlName="priority" id="priority_critical">
+            <label class="form-check-label" for="priority_critical">Critical</label>
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-end gap-3">
+          <button type="button" class="btn btn-outline-secondary" (click)="navigateBack()">Cancel</button>
+          <button type="submit" class="btn btn-primary" [disabled]="submitting">
+            <span *ngIf="submitting" class="spinner-border spinner-border-sm me-2"></span>
+            Submit Referral
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

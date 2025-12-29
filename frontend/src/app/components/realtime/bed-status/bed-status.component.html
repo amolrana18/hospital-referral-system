@@ -1,0 +1,199 @@
+<div class="bed-status-container">
+  <!-- Header -->
+  <div class="header mb-4">
+    <div class="d-flex justify-content-between align-items-center">
+      <div>
+        <h2>Real-time Bed Status</h2>
+        <p class="text-muted mb-0">Live bed availability across Uttarakhand hospitals</p>
+      </div>
+      <div class="btn-group">
+        <button class="btn btn-primary" (click)="refreshData()">
+          <i class="fas fa-sync-alt"></i> Refresh
+        </button>
+        <button class="btn btn-outline-primary" (click)="sortBy('available_beds')">
+          <i class="fas fa-sort-amount-down"></i> Sort by Availability
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading Indicator -->
+  <div *ngIf="loading" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+    <p class="mt-2">Loading bed status data...</p>
+  </div>
+
+  <!-- Filters -->
+  <div *ngIf="!loading" class="card filters-card mb-4">
+    <div class="card-body">
+      <div class="row g-3">
+        <div class="col-md-3">
+          <label class="form-label">District</label>
+          <select class="form-select" [(ngModel)]="filters.district" (change)="applyFilters()">
+            <option value="">All Districts</option>
+            <option *ngFor="let district of districts" [value]="district">
+              {{ district }}
+            </option>
+          </select>
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">Minimum Beds Available</label>
+          <select class="form-select" [(ngModel)]="filters.minAvailability" (change)="applyFilters()">
+            <option [value]="0">Any</option>
+            <option [value]="1">1+ Beds</option>
+            <option [value]="5">5+ Beds</option>
+            <option [value]="10">10+ Beds</option>
+            <option [value]="20">20+ Beds</option>
+            <option [value]="50">50+ Beds</option>
+          </select>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Search Hospital</label>
+          <div class="input-group">
+            <span class="input-group-text">
+              <i class="fas fa-search"></i>
+            </span>
+            <input type="text" 
+                   class="form-control" 
+                   [(ngModel)]="filters.search"
+                   (keyup)="applyFilters()"
+                   placeholder="Search hospital name...">
+          </div>
+        </div>
+        <div class="col-md-2 d-flex align-items-end">
+          <button class="btn btn-outline-secondary w-100" (click)="clearFilters()">
+            <i class="fas fa-times me-1"></i>Clear Filters
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stats Summary -->
+  <div *ngIf="!loading" class="row mb-4">
+    <div class="col-md-3 col-6 mb-4">
+      <div class="card stat-card">
+        <div class="card-body text-center">
+          <h6 class="text-muted mb-2">Total Hospitals</h6>
+          <h3 class="text-primary">{{ filteredBedStatus.length }}</h3>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3 col-6 mb-4">
+      <div class="card stat-card">
+        <div class="card-body text-center">
+          <h6 class="text-muted mb-2">Total Beds Available</h6>
+          <h3 class="text-success">
+            {{ getTotalAvailableBeds() }}
+          </h3>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3 col-6 mb-4">
+      <div class="card stat-card">
+        <div class="card-body text-center">
+          <h6 class="text-muted mb-2">ICU Beds Available</h6>
+          <h3 class="text-info">
+            {{ getTotalICUBeds() }}
+          </h3>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3 col-6 mb-4">
+      <div class="card stat-card">
+        <div class="card-body text-center">
+          <h6 class="text-muted mb-2">Average Occupancy</h6>
+          <h3 class="text-warning">
+            {{ getAverageOccupancy() }}%
+          </h3>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bed Status Grid -->
+  <div *ngIf="!loading" class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <h5 class="mb-0">Hospital Bed Status</h5>
+      <span class="badge bg-primary">
+        Showing {{ filteredBedStatus.length }} of {{ bedStatusList.length }} hospitals
+      </span>
+    </div>
+    
+    <div class="card-body">
+      <div class="bed-status-grid">
+        <div *ngFor="let hospital of filteredBedStatus" class="bed-status-card">
+          <div class="hospital-header">
+            <h6 class="hospital-name">{{ hospital.hospital_name }}</h6>
+            <small class="text-muted">{{ hospital.district_name }}</small>
+          </div>
+          
+          <div class="bed-stats mt-3">
+            <div class="stat-row">
+              <span class="stat-label">Total Beds</span>
+              <span class="stat-value">{{ hospital.total_beds }}</span>
+            </div>
+            <div class="stat-row">
+              <span class="stat-label">Available Beds</span>
+              <span class="stat-value" 
+                    [ngClass]="getAvailabilityClass(hospital.available_beds, hospital.total_beds)">
+                {{ hospital.available_beds }}
+              </span>
+            </div>
+            <div class="stat-row">
+              <span class="stat-label">ICU Available</span>
+              <span class="stat-value" 
+                    [ngClass]="getICUAvailabilityClass(hospital.available_icu_beds, hospital.total_icu_beds)">
+                {{ hospital.available_icu_beds || 0 }}/{{ hospital.total_icu_beds || 0 }}
+              </span>
+            </div>
+          </div>
+          
+          <div class="occupancy-meter mt-3">
+            <div class="d-flex justify-content-between align-items-center mb-1">
+              <small class="text-muted">Occupancy Rate</small>
+              <small class="fw-bold">{{ hospital.occupancy_rate || 0 }}%</small>
+            </div>
+            <div class="progress" style="height: 8px;">
+              <div class="progress-bar" 
+                   [ngClass]="getOccupancyClass(hospital.occupancy_rate || 0)"
+                   [style.width]="(hospital.occupancy_rate || 0) + '%'"
+                   role="progressbar">
+              </div>
+            </div>
+          </div>
+          
+          <div class="status-indicator mt-3">
+            <span *ngIf="hospital.available_beds >= 10" class="badge bg-success">
+              <i class="fas fa-check-circle me-1"></i>Good Availability
+            </span>
+            <span *ngIf="hospital.available_beds < 10 && hospital.available_beds > 0" class="badge bg-warning text-dark">
+              <i class="fas fa-exclamation-triangle me-1"></i>Limited Availability
+            </span>
+            <span *ngIf="hospital.available_beds === 0" class="badge bg-danger">
+              <i class="fas fa-times-circle me-1"></i>No Beds Available
+            </span>
+          </div>
+          
+          <div class="hospital-actions mt-3">
+            <button class="btn btn-sm btn-outline-primary w-100">
+              <i class="fas fa-ambulance me-1"></i>Refer Patient
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- No Results -->
+      <div *ngIf="filteredBedStatus.length === 0" class="text-center py-5">
+        <i class="fas fa-bed fa-3x text-muted mb-3"></i>
+        <h5 class="text-muted">No hospitals found</h5>
+        <p class="text-muted">Try changing your filters or search criteria</p>
+        <button class="btn btn-outline-primary" (click)="clearFilters()">
+          Clear All Filters
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

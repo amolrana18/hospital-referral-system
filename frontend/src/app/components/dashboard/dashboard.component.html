@@ -1,0 +1,16 @@
+<div class="dashboard-container">
+  <!-- Dashboard Header -->
+  <div class="dashboard-header mb-4">
+    <h1 class="dashboard-title">
+      <i class="fas fa-tachometer-alt me-2"></i>{{ getDashboardTitle() }}
+    </h1>
+    <p class="dashboard-subtitle">
+      Welcome back, <strong>{{ userName }}</strong>!
+    </p>
+  </div>
+
+  <!-- Dashboard Content -->
+  <div class="dashboard-content">
+    <router-outlet></router-outlet>
+  </div>
+</div>

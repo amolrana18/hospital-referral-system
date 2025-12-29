@@ -1,0 +1,166 @@
+.update-bed-status-container {
+  min-height: calc(100vh - 180px);
+}
+
+.header {
+  background: white;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.bed-stat {
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 10px;
+  transition: all 0.3s;
+}
+
+.bed-stat:hover {
+  background: #e9ecef;
+  transform: translateY(-2px);
+}
+
+.bed-stat h3 {
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.card {
+  border-radius: 10px;
+  border: none;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.card-header {
+  background-color: white;
+  border-bottom: 1px solid #eee;
+  font-weight: 600;
+  padding: 15px 20px;
+}
+
+.form-label {
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.form-control {
+  padding: 10px 15px;
+  border: 2px solid #e0e0e0;
+  transition: all 0.3s;
+}
+
+.form-control:focus {
+  border-color: #1a73e8;
+  box-shadow: 0 0 0 0.2rem rgba(26, 115, 232, 0.25);
+}
+
+.form-control.is-invalid {
+  border-color: #dc3545;
+}
+
+.invalid-feedback {
+  font-size: 14px;
+  margin-top: 5px;
+}
+
+.input-group-text {
+  background-color: #f8f9fa;
+  color: #666;
+}
+
+.guidelines-list {
+  padding: 10px 0;
+}
+
+.guideline-item {
+  display: flex;
+  align-items: flex-start;
+  padding: 10px;
+  border-radius: 8px;
+  transition: background-color 0.2s;
+}
+
+.guideline-item:hover {
+  background-color: #f8f9fa;
+}
+
+.guideline-icon {
+  width: 40px;
+  height: 40px;
+  background: #f0f7ff;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 15px;
+  flex-shrink: 0;
+}
+
+.guideline-icon i {
+  font-size: 18px;
+}
+
+.guideline-content h6 {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.guideline-content p {
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.alert {
+  border-radius: 8px;
+  border: none;
+}
+
+.btn {
+  padding: 10px 24px;
+  font-weight: 500;
+}
+
+@media (max-width: 768px) {
+  .header {
+    padding: 15px;
+  }
+  
+  .bed-stat {
+    margin-bottom: 15px;
+  }
+  
+  .guideline-item {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .guideline-icon {
+    margin-right: 0;
+    margin-bottom: 10px;
+  }
+  
+  .input-group {
+    flex-direction: column;
+  }
+  
+  .input-group .form-control {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+  
+  .input-group-text {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .d-flex {
+    flex-direction: column;
+  }
+  
+  .btn {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+}

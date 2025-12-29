@@ -1,0 +1,143 @@
+<div class="referral-detail-container">
+  <div class="header mb-4">
+    <div class="d-flex justify-content-between align-items-center">
+      <div>
+        <h2>Referral Details</h2>
+        <p class="text-muted mb-0">Code: <strong>{{ referral?.referral_code }}</strong></p>
+      </div>
+      <button class="btn btn-outline-secondary" (click)="navigateBack()">
+        <i class="fas fa-arrow-left me-2"></i>Back
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="loading" class="text-center py-5">
+    <div class="spinner-border text-primary"></div>
+    <p class="mt-2">Loading referral details...</p>
+  </div>
+
+  <div *ngIf="!loading && referral" class="row">
+    <!-- Status Card -->
+    <div class="col-12 mb-4">
+      <div class="card">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <h5>Status: <span class="badge" [ngClass]="getStatusBadgeClass(referral.status)">{{ referral.status }}</span></h5>
+              <p class="mb-0">Priority: <span class="badge" [ngClass]="getPriorityBadgeClass(referral.priority)">{{ referral.priority }}</span></p>
+            </div>
+            <div *ngIf="canUpdateStatus">
+              <button class="btn btn-primary" (click)="updateStatus()">Update Status</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Patient Info -->
+    <div class="col-md-6 mb-4">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="mb-0">Patient Information</h5>
+        </div>
+        <div class="card-body">
+          <h4>{{ referral.patient_first_name }} {{ referral.patient_last_name }}</h4>
+          <div class="row">
+            <div class="col-6">
+              <p><i class="fas fa-phone me-2"></i>{{ referral.patient_phone }}</p>
+              <p><i class="fas fa-venus-mars me-2"></i>{{ referral.gender }}</p>
+              <p><i class="fas fa-birthday-cake me-2"></i>{{ referral.date_of_birth | date:'mediumDate' }}</p>
+            </div>
+            <div class="col-6">
+              <p><i class="fas fa-tint me-2"></i>{{ referral.blood_group }}</p>
+              <p><i class="fas fa-id-card me-2"></i>{{ referral.aadhaar || 'Not provided' }}</p>
+              <p><i class="fas fa-map-marker-alt me-2"></i>{{ referral.address }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Medical History -->
+    <div class="col-md-6 mb-4">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="mb-0">Medical History</h5>
+        </div>
+        <div class="card-body">
+          <div class="mb-3">
+            <h6 class="text-primary">Past Medical History</h6>
+            <p class="small">{{ referral.medical_history || 'No medical history recorded' }}</p>
+          </div>
+          <div class="mb-3">
+            <h6 class="text-warning">Allergies</h6>
+            <p class="small">{{ referral.allergies || 'No known allergies' }}</p>
+          </div>
+          <div class="mb-3">
+            <h6 class="text-info">Current Medications</h6>
+            <p class="small">{{ referral.current_medications || 'No current medications' }}</p>
+          </div>
+          <div>
+            <h6 class="text-danger">Emergency Contact</h6>
+            <p class="small">{{ referral.emergency_contact_name || 'Not provided' }}
+              <span *ngIf="referral.emergency_contact_number"> - {{ referral.emergency_contact_number }}</span>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hospital Info -->
+    <div class="col-md-6 mb-4">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="mb-0">Referral Information</h5>
+        </div>
+        <div class="card-body">
+          <div class="mb-3">
+            <h6 class="text-primary">Referring Hospital</h6>
+            <p>{{ referral.referring_hospital_name }}</p>
+            <small class="text-muted">Doctor: {{ referral.referring_doctor_name || 'Not specified' }}</small>
+          </div>
+          <div class="mb-3">
+            <h6 class="text-success">Receiving Hospital</h6>
+            <p>{{ referral.receiving_hospital_name }}</p>
+          </div>
+          <div>
+            <h6 class="text-info">Referral Date</h6>
+            <p>{{ referral.referral_date | date:'medium' }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Clinical Info -->
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="mb-0">Clinical Information</h5>
+        </div>
+        <div class="card-body">
+          <div class="mb-3">
+            <h6>Reason for Referral</h6>
+            <p>{{ referral.reason_for_referral }}</p>
+          </div>
+          <div class="mb-3">
+            <h6>Clinical Summary</h6>
+            <p>{{ referral.clinical_summary || 'Not provided' }}</p>
+          </div>
+          <div class="row">
+            <div class="col-md-4">
+              <h6>Requirements</h6>
+              <p class="small">
+                <span class="badge bg-info me-1" *ngIf="referral.bed_required">Bed Required</span>
+                <span class="badge bg-warning me-1" *ngIf="referral.doctor_required">Doctor Required</span>
+                <span class="badge bg-danger me-1" *ngIf="referral.ambulance_required">Ambulance Required</span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

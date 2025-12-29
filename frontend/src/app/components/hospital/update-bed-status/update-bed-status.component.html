@@ -1,0 +1,253 @@
+<div class="update-bed-status-container">
+  <!-- Header -->
+  <div class="header mb-4">
+    <div class="d-flex justify-content-between align-items-center">
+      <div>
+        <h2>Update Bed Status</h2>
+        <p class="text-muted mb-0">{{ hospitalName }}</p>
+      </div>
+      <button class="btn btn-outline-secondary" (click)="navigateBack()">
+        <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+      </button>
+    </div>
+  </div>
+
+  <!-- Loading Indicator -->
+  <div *ngIf="loading" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+    <p class="mt-2">Loading hospital data...</p>
+  </div>
+
+  <!-- Bed Status Content -->
+  <div *ngIf="!loading" class="bed-status-content">
+    <!-- Current Status Summary -->
+    <div class="row mb-4">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-header">
+            <h5 class="mb-0">Current Bed Status</h5>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-3 text-center mb-4">
+                <div class="bed-stat">
+                  <h3 class="text-primary">{{ currentStats.bed_capacity }}</h3>
+                  <p class="text-muted mb-0">Total Beds</p>
+                </div>
+              </div>
+              <div class="col-md-3 text-center mb-4">
+                <div class="bed-stat">
+                  <h3 [ngClass]="getOccupancyClass(calculateOccupancyRate())">
+                    {{ calculateOccupancyRate() }}%
+                  </h3>
+                  <p class="text-muted mb-0">Occupancy Rate</p>
+                </div>
+              </div>
+              <div class="col-md-3 text-center mb-4">
+                <div class="bed-stat">
+                  <h3 class="text-info">{{ currentStats.icu_beds }}</h3>
+                  <p class="text-muted mb-0">ICU Beds</p>
+                </div>
+              </div>
+              <div class="col-md-3 text-center mb-4">
+                <div class="bed-stat">
+                  <h3 class="text-danger">{{ currentStats.ventilator_beds }}</h3>
+                  <p class="text-muted mb-0">Ventilator Beds</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Update Form -->
+    <div class="row">
+      <div class="col-lg-8">
+        <div class="card">
+          <div class="card-header">
+            <h5 class="mb-0">Update Bed Availability</h5>
+          </div>
+          <div class="card-body">
+            <form [formGroup]="bedForm" (ngSubmit)="onSubmit()">
+              
+              <!-- Success Message -->
+              <div *ngIf="success" class="alert alert-success alert-dismissible fade show mb-4" role="alert">
+                <i class="fas fa-check-circle me-2"></i>
+                Bed status updated successfully!
+                <button type="button" class="btn-close" (click)="success = false"></button>
+              </div>
+
+              <!-- Error Message -->
+              <div *ngIf="error" class="alert alert-danger alert-dismissible fade show mb-4" role="alert">
+                <i class="fas fa-exclamation-circle me-2"></i>
+                {{ error }}
+                <button type="button" class="btn-close" (click)="error = ''"></button>
+              </div>
+
+              <!-- Operational Beds -->
+              <div class="mb-4">
+                <label for="operational_beds" class="form-label">Operational Beds *</label>
+                <div class="input-group">
+                  <input type="number" 
+                         id="operational_beds"
+                         formControlName="operational_beds"
+                         class="form-control"
+                         [class.is-invalid]="submitted && f.operational_beds.errors"
+                         min="0"
+                         max="{{ currentStats.bed_capacity }}"
+                         (blur)="validateBedCounts()">
+                  <span class="input-group-text">out of {{ currentStats.bed_capacity }} total</span>
+                </div>
+                <div *ngIf="submitted && f.operational_beds.errors" class="invalid-feedback d-block">
+                  <div *ngIf="f.operational_beds.errors.required">Operational beds is required</div>
+                  <div *ngIf="f.operational_beds.errors.min">Must be 0 or greater</div>
+                </div>
+                <small class="text-muted">
+                  Number of beds currently operational and available for patients
+                </small>
+              </div>
+
+              <!-- ICU Beds -->
+              <div class="mb-4">
+                <label for="icu_beds" class="form-label">ICU Beds *</label>
+                <div class="input-group">
+                  <input type="number" 
+                         id="icu_beds"
+                         formControlName="icu_beds"
+                         class="form-control"
+                         [class.is-invalid]="submitted && f.icu_beds.errors"
+                         min="0"
+                         (blur)="validateBedCounts()">
+                  <span class="input-group-text">out of operational beds</span>
+                </div>
+                <div *ngIf="submitted && f.icu_beds.errors" class="invalid-feedback d-block">
+                  <div *ngIf="f.icu_beds.errors.required">ICU beds is required</div>
+                  <div *ngIf="f.icu_beds.errors.min">Must be 0 or greater</div>
+                  <div *ngIf="f.icu_beds.errors.exceedsOperational">Cannot exceed operational beds</div>
+                </div>
+                <small class="text-muted">
+                  ICU beds should not exceed operational beds
+                </small>
+              </div>
+
+              <!-- Ventilator Beds -->
+              <div class="mb-4">
+                <label for="ventilator_beds" class="form-label">Ventilator Beds *</label>
+                <div class="input-group">
+                  <input type="number" 
+                         id="ventilator_beds"
+                         formControlName="ventilator_beds"
+                         class="form-control"
+                         [class.is-invalid]="submitted && f.ventilator_beds.errors"
+                         min="0"
+                         (blur)="validateBedCounts()">
+                  <span class="input-group-text">out of ICU beds</span>
+                </div>
+                <div *ngIf="submitted && f.ventilator_beds.errors" class="invalid-feedback d-block">
+                  <div *ngIf="f.ventilator_beds.errors.required">Ventilator beds is required</div>
+                  <div *ngIf="f.ventilator_beds.errors.min">Must be 0 or greater</div>
+                  <div *ngIf="f.ventilator_beds.errors.exceedsICU">Cannot exceed ICU beds</div>
+                </div>
+                <small class="text-muted">
+                  Ventilator beds should not exceed ICU beds
+                </small>
+              </div>
+
+              <!-- Notes -->
+              <div class="mb-4">
+                <label for="notes" class="form-label">Update Notes (Optional)</label>
+                <textarea id="notes"
+                          formControlName="notes"
+                          class="form-control"
+                          rows="3"
+                          placeholder="Add any notes about this update (e.g., reason for change, maintenance schedule, etc.)"></textarea>
+                <small class="text-muted">
+                  Optional notes to explain the bed status change
+                </small>
+              </div>
+
+              <!-- Form Actions -->
+              <div class="d-flex justify-content-end gap-3 mt-4">
+                <button type="button" 
+                        class="btn btn-outline-secondary"
+                        (click)="navigateBack()">
+                  Cancel
+                </button>
+                <button type="submit" 
+                        class="btn btn-primary"
+                        [disabled]="submitting">
+                  <span *ngIf="submitting" class="spinner-border spinner-border-sm me-2"></span>
+                  <i class="fas fa-save me-2"></i>
+                  Update Bed Status
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- Guidelines -->
+      <div class="col-lg-4">
+        <div class="card">
+          <div class="card-header">
+            <h5 class="mb-0">Update Guidelines</h5>
+          </div>
+          <div class="card-body">
+            <div class="guidelines-list">
+              <div class="guideline-item mb-3">
+                <div class="guideline-icon">
+                  <i class="fas fa-info-circle text-primary"></i>
+                </div>
+                <div class="guideline-content">
+                  <h6>Update Frequency</h6>
+                  <p class="text-muted small mb-0">
+                    Update bed status at least once every 6 hours or whenever there are significant changes.
+                  </p>
+                </div>
+              </div>
+
+              <div class="guideline-item mb-3">
+                <div class="guideline-icon">
+                  <i class="fas fa-exclamation-triangle text-warning"></i>
+                </div>
+                <div class="guideline-content">
+                  <h6>Emergency Situations</h6>
+                  <p class="text-muted small mb-0">
+                    In emergency situations, update immediately to ensure accurate real-time information.
+                  </p>
+                </div>
+              </div>
+
+              <div class="guideline-item mb-3">
+                <div class="guideline-icon">
+                  <i class="fas fa-bed text-success"></i>
+                </div>
+                <div class="guideline-content">
+                  <h6>Accuracy Matters</h6>
+                  <p class="text-muted small mb-0">
+                    Ensure bed counts are accurate as other hospitals rely on this information for referrals.
+                  </p>
+                </div>
+              </div>
+
+              <div class="guideline-item">
+                <div class="guideline-icon">
+                  <i class="fas fa-clock text-info"></i>
+                </div>
+                <div class="guideline-content">
+                  <h6>Real-time Updates</h6>
+                  <p class="text-muted small mb-0">
+                    Changes are reflected in real-time across all dashboards in the system.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

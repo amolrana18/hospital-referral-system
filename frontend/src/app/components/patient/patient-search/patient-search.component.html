@@ -1,0 +1,176 @@
+<div class="patient-search-container">
+  <!-- Header -->
+  <div class="header mb-4">
+    <div class="d-flex justify-content-between align-items-center">
+      <div>
+        <h2>Patient Search</h2>
+        <p class="text-muted mb-0">Search and manage patient records</p>
+      </div>
+      <div>
+        <button class="btn btn-outline-primary me-2" (click)="loadAllPatients()">
+          <i class="fas fa-list me-2"></i>Show All
+        </button>
+        <button class="btn btn-primary" (click)="navigateToNewPatient()">
+          <i class="fas fa-user-plus me-2"></i>New Patient
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Search Bar -->
+  <div class="card search-card mb-4">
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-8">
+          <div class="input-group">
+            <span class="input-group-text">
+              <i class="fas fa-search"></i>
+            </span>
+            <input type="text" 
+                   class="form-control" 
+                   [(ngModel)]="searchQuery"
+                   (keyup.enter)="searchPatients()"
+                   placeholder="Search by name, phone, Aadhaar, or address...">
+            <button class="btn btn-primary" (click)="searchPatients()">
+              <i class="fas fa-search me-2"></i>Search
+            </button>
+            <button *ngIf="searchQuery" 
+                    class="btn btn-outline-secondary" 
+                    (click)="clearSearch()">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+        </div>
+        <div class="col-md-4 d-flex align-items-center">
+          <small class="text-muted">
+            <i class="fas fa-info-circle me-1"></i>
+            Enter at least 2 characters to search
+          </small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading Indicator -->
+  <div *ngIf="searching" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+    <p class="mt-2">Searching patients...</p>
+  </div>
+
+  <!-- Results -->
+  <div *ngIf="!searching">
+    <div class="card">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">Patient Records</h5>
+        <span class="badge bg-primary">{{ patients.length }} patients found</span>
+      </div>
+      
+      <div class="card-body">
+        <div class="table-responsive">
+          <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z0">
+            
+            <!-- Name Column -->
+            <ng-container matColumnDef="name">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Patient Name</th>
+              <td mat-cell *matCellDef="let patient">
+                <div class="patient-info">
+                  <h6 class="mb-1">{{ patient.first_name }} {{ patient.last_name }}</h6>
+                  <small class="text-muted">
+                    <i class="fas fa-venus-mars me-1"></i>{{ patient.gender }}
+                    <span *ngIf="patient.date_of_birth" class="ms-2">
+                      <i class="fas fa-birthday-cake me-1"></i>
+                      {{ patient.date_of_birth | date:'yyyy-MM-dd' }}
+                    </span>
+                  </small>
+                </div>
+              </td>
+            </ng-container>
+
+            <!-- Phone Column -->
+            <ng-container matColumnDef="phone">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Contact</th>
+              <td mat-cell *matCellDef="let patient">
+                <div class="contact-info">
+                  <small class="d-block">
+                    <i class="fas fa-phone me-1"></i>{{ patient.phone_number }}
+                  </small>
+                  <small *ngIf="patient.alternate_phone" class="text-muted d-block">
+                    Alt: {{ patient.alternate_phone }}
+                  </small>
+                  <small *ngIf="patient.email" class="text-muted d-block">
+                    <i class="fas fa-envelope me-1"></i>{{ patient.email }}
+                  </small>
+                </div>
+              </td>
+            </ng-container>
+
+            <!-- Aadhaar Column -->
+            <ng-container matColumnDef="aadhaar">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Aadhaar</th>
+              <td mat-cell *matCellDef="let patient">
+                {{ patient.aadhaar || 'Not specified' }}
+              </td>
+            </ng-container>
+
+            <!-- Blood Group Column -->
+            <ng-container matColumnDef="blood_group">
+              <th mat-header-cell *matHeaderCellDef>Blood Group</th>
+              <td mat-cell *matCellDef="let patient">
+                <span class="badge" [ngClass]="getBloodGroupBadgeClass(patient.blood_group || 'Unknown')">
+                  {{ patient.blood_group || 'Unknown' }}
+                </span>
+              </td>
+            </ng-container>
+
+            <!-- Address Column -->
+            <ng-container matColumnDef="address">
+              <th mat-header-cell *matHeaderCellDef>Address</th>
+              <td mat-cell *matCellDef="let patient">
+                <small class="text-muted d-block">{{ getFullAddress(patient) }}</small>
+                <small class="d-block">{{ patient.address }}</small>
+              </td>
+            </ng-container>
+
+            <!-- Actions Column -->
+            <ng-container matColumnDef="actions">
+              <th mat-header-cell *matHeaderCellDef class="text-end">Actions</th>
+              <td mat-cell *matCellDef="let patient" class="text-end">
+                <div class="btn-group" role="group">
+                  <button class="btn btn-sm btn-outline-primary" 
+                          (click)="navigateToPatientDetail(patient.patient_id)">
+                    <i class="fas fa-eye"></i>
+                  </button>
+                  <button class="btn btn-sm btn-outline-success"
+                          (click)="navigateToNewReferral(patient)">
+                    <i class="fas fa-ambulance"></i>
+                  </button>
+                </div>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+            <!-- No Data Row -->
+            <tr class="mat-row" *matNoDataRow>
+              <td class="mat-cell text-center py-4" colspan="6">
+                <i class="fas fa-user-injured fa-2x text-muted mb-3"></i>
+                <p class="text-muted mb-0">
+                  {{ searchQuery ? 'No patients found for your search' : 'Recent patients will appear here' }}
+                </p>
+                <p *ngIf="!searchQuery" class="text-muted small">
+                  Enter at least 2 characters in the search box to find patients
+                </p>
+              </td>
+            </tr>
+          </table>
+        </div>
+
+        <!-- Paginator -->
+        <mat-paginator [pageSizeOptions]="[10, 25, 50]" showFirstLastButtons></mat-paginator>
+      </div>
+    </div>
+  </div>
+</div>

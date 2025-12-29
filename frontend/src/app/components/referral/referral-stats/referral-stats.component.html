@@ -1,0 +1,59 @@
+<div class="referral-stats-container">
+  <div class="header mb-4">
+    <h2>Referral Statistics</h2>
+    <p class="text-muted mb-0">Analytics and insights for referral system</p>
+  </div>
+
+  <div *ngIf="loading" class="text-center py-5">
+    <div class="spinner-border text-primary"></div>
+    <p class="mt-2">Loading statistics...</p>
+  </div>
+
+  <div *ngIf="!loading" class="row">
+    <!-- Summary Cards -->
+    <div class="col-md-3 mb-4">
+      <div class="card stat-card">
+        <div class="card-body text-center">
+          <h6 class="text-muted mb-2">Total Referrals</h6>
+          <h3 class="text-primary">{{ stats.total }}</h3>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3 mb-4">
+      <div class="card stat-card">
+        <div class="card-body text-center">
+          <h6 class="text-muted mb-2">Pending</h6>
+          <h3 class="text-warning">{{ stats.pending }}</h3>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3 mb-4">
+      <div class="card stat-card">
+        <div class="card-body text-center">
+          <h6 class="text-muted mb-2">Approved</h6>
+          <h3 class="text-success">{{ stats.approved }}</h3>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3 mb-4">
+      <div class="card stat-card">
+        <div class="card-body text-center">
+          <h6 class="text-muted mb-2">Completed</h6>
+          <h3 class="text-info">{{ stats.completed }}</h3>
+        </div>
+      </div>
+    </div>
+
+    <!-- Charts -->
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="mb-0">Referral Trends</h5>
+        </div>
+        <div class="card-body">
+          <canvas id="referralChart" width="400" height="200"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,96 @@
+<div class="login-container">
+  <div class="container">
+    <div class="row justify-content-center align-items-center min-vh-100">
+      <div class="col-11 col-sm-9 col-md-6 col-lg-4">
+
+        <div class="card shadow-lg">
+          <!-- Header -->
+          <div class="card-header bg-primary text-white text-center py-4">
+            <h3 class="mb-1">
+              <i class="fas fa-hospital me-2"></i>
+              Hospital Referral System
+            </h3>
+            <p class="mb-0 opacity-75">
+              <span *ngIf="userTypeDisplay">{{ userTypeDisplay }} Login</span>
+              <span *ngIf="!userTypeDisplay">Login to your account</span>
+            </p>
+          </div>
+
+          <!-- Body -->
+          <div class="card-body p-4">
+            <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+
+              <!-- Email -->
+              <div class="mb-3">
+                <label class="form-label">Email Address</label>
+                <input
+                  type="email"
+                  class="form-control"
+                  placeholder="Enter your email"
+                  formControlName="email"
+                  [class.is-invalid]="submitted && f.email.errors"
+                />
+                <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
+                  <div *ngIf="f.email.errors.required">Email is required</div>
+                  <div *ngIf="f.email.errors.email">Invalid email format</div>
+                </div>
+              </div>
+
+              <!-- Password -->
+              <div class="mb-3">
+                <label class="form-label">Password</label>
+                <input
+                  type="password"
+                  class="form-control"
+                  placeholder="Enter your password"
+                  formControlName="password"
+                  [class.is-invalid]="submitted && f.password.errors"
+                />
+                <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
+                  <div *ngIf="f.password.errors.required">Password is required</div>
+                  <div *ngIf="f.password.errors.minlength">
+                    Minimum 6 characters required
+                  </div>
+                </div>
+              </div>
+
+              <!-- Error -->
+              <div *ngIf="error" class="alert alert-danger">
+                {{ error }}
+              </div>
+
+              <!-- Button -->
+              <div class="d-grid mb-3">
+                <button class="btn btn-primary" type="submit" [disabled]="loading">
+                  <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
+                  <i class="fas fa-sign-in-alt me-2"></i>
+                  Login
+                </button>
+              </div>
+
+              <!-- Links -->
+              <div class="text-center">
+                <p class="mb-1">
+                  Don't have an account?
+                  <a href="javascript:void(0)" (click)="navigateToRegister()">Register</a>
+                </p>
+                <a href="javascript:void(0)" (click)="navigateToHome()">
+                  <i class="fas fa-home me-1"></i>Back to Home
+                </a>
+              </div>
+
+            </form>
+          </div>
+
+          <!-- Footer -->
+          <div class="card-footer text-center">
+            <small class="text-muted">
+              Authorized users only
+            </small>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

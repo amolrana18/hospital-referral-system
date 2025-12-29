@@ -1,0 +1,15 @@
+<div class="app-container">
+  <!-- Navbar -->
+  <app-navbar *ngIf="isLoggedIn"></app-navbar>
+  
+  <!-- Main Content -->
+  <div class="main-content" [class.with-navbar]="isLoggedIn">
+    <!-- Sidebar for logged in users -->
+    <app-sidebar *ngIf="isLoggedIn && userRole"></app-sidebar>
+    
+    <!-- Router Outlet -->
+    <div class="content-area" [class.with-sidebar]="isLoggedIn">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>

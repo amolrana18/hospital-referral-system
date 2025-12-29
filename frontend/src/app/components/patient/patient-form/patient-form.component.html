@@ -1,0 +1,403 @@
+<div class="patient-form-container">
+  <!-- Header -->
+  <div class="header mb-4">
+    <div class="d-flex justify-content-between align-items-center">
+      <div>
+        <h2>Register New Patient</h2>
+        <p class="text-muted mb-0">Add a new patient to the system</p>
+      </div>
+      <button class="btn btn-outline-secondary" (click)="navigateBack()">
+        <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+      </button>
+    </div>
+  </div>
+
+  <!-- Patient Form -->
+  <div class="card">
+    <div class="card-header">
+      <h5 class="mb-0">Patient Information</h5>
+    </div>
+    
+    <div class="card-body">
+      <form [formGroup]="patientForm" (ngSubmit)="onSubmit()">
+        
+        <!-- Success Message -->
+        <div *ngIf="success" class="alert alert-success alert-dismissible fade show mb-4" role="alert">
+          <i class="fas fa-check-circle me-2"></i>
+          Patient registered successfully! Redirecting...
+          <button type="button" class="btn-close" (click)="success = false"></button>
+        </div>
+
+        <!-- Error Message -->
+        <div *ngIf="error" class="alert alert-danger alert-dismissible fade show mb-4" role="alert">
+          <i class="fas fa-exclamation-circle me-2"></i>
+          {{ error }}
+          <button type="button" class="btn-close" (click)="error = ''"></button>
+        </div>
+
+        <!-- Personal Information -->
+        <h6 class="mb-3 text-primary"><i class="fas fa-user me-2"></i>Personal Information</h6>
+        <div class="row mb-4">
+          <div class="col-md-6 mb-3">
+            <label for="first_name" class="form-label">First Name *</label>
+            <input type="text" 
+                   id="first_name"
+                   formControlName="first_name"
+                   class="form-control"
+                   [class.is-invalid]="submitted && f.first_name.errors"
+                   placeholder="Enter first name">
+            <div *ngIf="submitted && f.first_name.errors" class="invalid-feedback">
+              First name is required
+            </div>
+          </div>
+
+          <div class="col-md-6 mb-3">
+            <label for="last_name" class="form-label">Last Name *</label>
+            <input type="text" 
+                   id="last_name"
+                   formControlName="last_name"
+                   class="form-control"
+                   [class.is-invalid]="submitted && f.last_name.errors"
+                   placeholder="Enter last name">
+            <div *ngIf="submitted && f.last_name.errors" class="invalid-feedback">
+              Last name is required
+            </div>
+          </div>
+
+          <div class="col-md-4 mb-3">
+            <label for="date_of_birth" class="form-label">Date of Birth</label>
+            <input type="date" 
+                   id="date_of_birth"
+                   formControlName="date_of_birth"
+                   class="form-control"
+                   (change)="calculateAge()">
+            <div *ngIf="f.date_of_birth.value" class="mt-2">
+              <small class="text-muted">Age: {{ calculateAge() }} years</small>
+            </div>
+          </div>
+
+          <div class="col-md-4 mb-3">
+            <label class="form-label">Gender *</label>
+            <div class="gender-options">
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" 
+                       type="radio" 
+                       id="gender_male"
+                       value="Male"
+                       formControlName="gender">
+                <label class="form-check-label" for="gender_male">Male</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" 
+                       type="radio" 
+                       id="gender_female"
+                       value="Female"
+                       formControlName="gender">
+                <label class="form-check-label" for="gender_female">Female</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" 
+                       type="radio" 
+                       id="gender_other"
+                       value="Other"
+                       formControlName="gender">
+                <label class="form-check-label" for="gender_other">Other</label>
+              </div>
+            </div>
+            <div *ngIf="submitted && f.gender.errors" class="invalid-feedback d-block">
+              Gender is required
+            </div>
+          </div>
+
+          <div class="col-md-4 mb-3">
+            <label for="marital_status" class="form-label">Marital Status</label>
+            <select id="marital_status"
+                    formControlName="marital_status"
+                    class="form-select">
+              <option value="">Select</option>
+              <option *ngFor="let status of maritalStatuses" [value]="status">{{ status }}</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Contact Information -->
+        <h6 class="mb-3 text-primary"><i class="fas fa-phone me-2"></i>Contact Information</h6>
+        <div class="row mb-4">
+          <div class="col-md-6 mb-3">
+            <label for="phone_number" class="form-label">Phone Number *</label>
+            <input type="text" 
+                   id="phone_number"
+                   formControlName="phone_number"
+                   class="form-control"
+                   [class.is-invalid]="submitted && f.phone_number.errors"
+                   placeholder="10-digit phone number">
+            <div *ngIf="submitted && f.phone_number.errors" class="invalid-feedback">
+              <div *ngIf="f.phone_number.errors.required">Phone number is required</div>
+              <div *ngIf="f.phone_number.errors.pattern">Enter valid 10-digit phone number</div>
+            </div>
+          </div>
+
+          <div class="col-md-6 mb-3">
+            <label for="alternate_phone" class="form-label">Alternate Phone</label>
+            <input type="text" 
+                   id="alternate_phone"
+                   formControlName="alternate_phone"
+                   class="form-control"
+                   [class.is-invalid]="submitted && f.alternate_phone.errors"
+                   placeholder="Alternate phone number">
+            <div *ngIf="submitted && f.alternate_phone.errors" class="invalid-feedback">
+              Enter valid 10-digit phone number
+            </div>
+          </div>
+
+          <div class="col-md-6 mb-3">
+            <label for="email" class="form-label">Email Address</label>
+            <input type="email" 
+                   id="email"
+                   formControlName="email"
+                   class="form-control"
+                   [class.is-invalid]="submitted && f.email.errors"
+                   placeholder="patient@example.com">
+            <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
+              Enter a valid email address
+            </div>
+          </div>
+
+          <div class="col-md-6 mb-3">
+            <label for="occupation" class="form-label">Occupation</label>
+            <input type="text" 
+                   id="occupation"
+                   formControlName="occupation"
+                   class="form-control"
+                   placeholder="Enter occupation">
+          </div>
+        </div>
+
+        <!-- Address Information -->
+        <h6 class="mb-3 text-primary"><i class="fas fa-map-marker-alt me-2"></i>Address Information</h6>
+        <div class="row mb-4">
+          <div class="col-12 mb-3">
+            <label for="address" class="form-label">Full Address *</label>
+            <textarea id="address"
+                      formControlName="address"
+                      class="form-control"
+                      [class.is-invalid]="submitted && f.address.errors"
+                      rows="2"
+                      placeholder="House number, street, locality"></textarea>
+            <div *ngIf="submitted && f.address.errors" class="invalid-feedback">
+              Address is required
+            </div>
+          </div>
+
+          <div class="col-md-4 mb-3">
+            <label for="district_id" class="form-label">District</label>
+            <select id="district_id"
+                    formControlName="district_id"
+                    class="form-select">
+              <option value="">Select District</option>
+              <option *ngFor="let district of districts" [value]="district.district_id">
+                {{ district.district_name }}
+              </option>
+            </select>
+          </div>
+
+          <div class="col-md-4 mb-3">
+            <label for="block_id" class="form-label">Block</label>
+            <select id="block_id"
+                    formControlName="block_id"
+                    class="form-select"
+                    [disabled]="!blocks.length">
+              <option value="">Select Block</option>
+              <option *ngFor="let block of blocks" [value]="block.block_id">
+                {{ block.block_name }}
+              </option>
+            </select>
+          </div>
+
+          <div class="col-md-4 mb-3">
+            <label for="village" class="form-label">Village/Town</label>
+            <input type="text" 
+                   id="village"
+                   formControlName="village"
+                   class="form-control"
+                   placeholder="Enter village or town">
+          </div>
+
+          <div class="col-md-4 mb-3">
+            <label for="pincode" class="form-label">Pincode</label>
+            <input type="text" 
+                   id="pincode"
+                   formControlName="pincode"
+                   class="form-control"
+                   [class.is-invalid]="submitted && f.pincode.errors"
+                   placeholder="6-digit pincode"
+                   maxlength="6">
+            <div *ngIf="submitted && f.pincode.errors" class="invalid-feedback">
+              Enter a valid 6-digit pincode
+            </div>
+          </div>
+        </div>
+
+        <!-- Identification Details -->
+        <h6 class="mb-3 text-primary"><i class="fas fa-id-card me-2"></i>Identification Details</h6>
+        <div class="row mb-4">
+          <div class="col-md-6 mb-3">
+            <label for="aadhaar" class="form-label">Aadhaar Number</label>
+            <input type="text" 
+                   id="aadhaar"
+                   formControlName="aadhaar"
+                   class="form-control"
+                   [class.is-invalid]="submitted && f.aadhaar.errors"
+                   placeholder="12-digit Aadhaar number"
+                   maxlength="12">
+            <div *ngIf="submitted && f.aadhaar.errors" class="invalid-feedback">
+              Enter valid 12-digit Aadhaar number
+            </div>
+          </div>
+
+          <div class="col-md-6 mb-3">
+            <label for="pan_number" class="form-label">PAN Number</label>
+            <input type="text" 
+                   id="pan_number"
+                   formControlName="pan_number"
+                   class="form-control"
+                   [class.is-invalid]="submitted && f.pan_number.errors"
+                   placeholder="ABCDE1234F"
+                   maxlength="10">
+            <div *ngIf="submitted && f.pan_number.errors" class="invalid-feedback">
+              Enter valid PAN number
+            </div>
+          </div>
+
+          <div class="col-md-4 mb-3">
+            <label for="blood_group" class="form-label">Blood Group</label>
+            <select id="blood_group"
+                    formControlName="blood_group"
+                    class="form-select">
+              <option *ngFor="let group of bloodGroups" [value]="group">{{ group }}</option>
+            </select>
+          </div>
+
+          <div class="col-md-4 mb-3">
+            <label for="rh_factor" class="form-label">Rh Factor</label>
+            <select id="rh_factor"
+                    formControlName="rh_factor"
+                    class="form-select">
+              <option *ngFor="let factor of rhFactors" [value]="factor">{{ factor }}</option>
+            </select>
+          </div>
+
+          <div class="col-md-4 mb-3">
+            <label for="category" class="form-label">Category</label>
+            <select id="category"
+                    formControlName="category"
+                    class="form-select">
+              <option value="">Select</option>
+              <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Medical History -->
+        <h6 class="mb-3 text-primary"><i class="fas fa-file-medical me-2"></i>Medical History</h6>
+        <div class="row mb-4">
+          <div class="col-md-6 mb-3">
+            <label for="medical_history" class="form-label">Medical History</label>
+            <textarea id="medical_history"
+                      formControlName="medical_history"
+                      class="form-control"
+                      rows="3"
+                      placeholder="Chronic illnesses, existing conditions"></textarea>
+          </div>
+
+          <div class="col-md-6 mb-3">
+            <label for="surgical_history" class="form-label">Surgical History</label>
+            <textarea id="surgical_history"
+                      formControlName="surgical_history"
+                      class="form-control"
+                      rows="3"
+                      placeholder="Previous surgeries, procedures"></textarea>
+          </div>
+
+          <div class="col-md-6 mb-3">
+            <label for="allergies" class="form-label">Allergies</label>
+            <textarea id="allergies"
+                      formControlName="allergies"
+                      class="form-control"
+                      rows="2"
+                      placeholder="Drug allergies, food allergies"></textarea>
+          </div>
+
+          <div class="col-md-6 mb-3">
+            <label for="current_medications" class="form-label">Current Medications</label>
+            <textarea id="current_medications"
+                      formControlName="current_medications"
+                      class="form-control"
+                      rows="2"
+                      placeholder="Regular medications being taken"></textarea>
+          </div>
+
+          <div class="col-12 mb-3">
+            <label for="family_history" class="form-label">Family Medical History</label>
+            <textarea id="family_history"
+                      formControlName="family_history"
+                      class="form-control"
+                      rows="2"
+                      placeholder="Family history of diseases"></textarea>
+          </div>
+        </div>
+
+        <!-- Emergency Contact -->
+        <h6 class="mb-3 text-primary"><i class="fas fa-ambulance me-2"></i>Emergency Contact</h6>
+        <div class="row mb-4">
+          <div class="col-md-4 mb-3">
+            <label for="emergency_contact_name" class="form-label">Contact Name</label>
+            <input type="text" 
+                   id="emergency_contact_name"
+                   formControlName="emergency_contact_name"
+                   class="form-control"
+                   placeholder="Emergency contact name">
+          </div>
+
+          <div class="col-md-4 mb-3">
+            <label for="emergency_contact_number" class="form-label">Contact Number</label>
+            <input type="text" 
+                   id="emergency_contact_number"
+                   formControlName="emergency_contact_number"
+                   class="form-control"
+                   [class.is-invalid]="submitted && f.emergency_contact_number.errors"
+                   placeholder="Emergency phone number">
+            <div *ngIf="submitted && f.emergency_contact_number.errors" class="invalid-feedback">
+              Enter valid 10-digit phone number
+            </div>
+          </div>
+
+          <div class="col-md-4 mb-3">
+            <label for="emergency_contact_relationship" class="form-label">Relationship</label>
+            <input type="text" 
+                   id="emergency_contact_relationship"
+                   formControlName="emergency_contact_relationship"
+                   class="form-control"
+                   placeholder="e.g., Spouse, Parent, Sibling">
+          </div>
+        </div>
+
+        <!-- Form Actions -->
+        <div class="d-flex justify-content-end gap-3 mt-4">
+          <button type="button" 
+                  class="btn btn-outline-secondary"
+                  (click)="navigateBack()">
+            Cancel
+          </button>
+          <button type="submit" 
+                  class="btn btn-primary"
+                  [disabled]="loading">
+            <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
+            <i class="fas fa-save me-2"></i>
+            Register Patient
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,116 @@
+.hospital-staff-container {
+  min-height: calc(100vh - 180px);
+}
+
+.header {
+  background: white;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.stat-card {
+  border-radius: 10px;
+  border: none;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  transition: transform 0.3s;
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+}
+
+.stat-icon {
+  opacity: 0.3;
+}
+
+.department-card {
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 15px;
+  height: 100%;
+  transition: all 0.3s;
+}
+
+.department-card:hover {
+  background: #e9ecef;
+}
+
+.avatar-placeholder {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.staff-item {
+  padding: 8px;
+  border-radius: 6px;
+  transition: background-color 0.2s;
+}
+
+.staff-item:hover {
+  background-color: white;
+}
+
+.staff-info small {
+  font-size: 12px;
+}
+
+.table th {
+  border-top: none;
+  font-weight: 600;
+  color: #666;
+  background-color: #f8f9fa;
+}
+
+.table td {
+  vertical-align: middle;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+}
+
+.btn-group .btn {
+  padding: 4px 8px;
+  margin-left: 4px;
+}
+
+@media (max-width: 768px) {
+  .header {
+    padding: 15px;
+  }
+  
+  .stat-card {
+    margin-bottom: 15px;
+  }
+  
+  .department-card {
+    margin-bottom: 15px;
+  }
+  
+  .table-responsive {
+    font-size: 14px;
+  }
+  
+  .input-group {
+    width: 100% !important;
+    margin-top: 15px;
+  }
+  
+  .btn-group {
+    flex-wrap: wrap;
+  }
+  
+  .btn-group .btn {
+    margin-bottom: 4px;
+  }
+}

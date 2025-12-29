@@ -1,0 +1,77 @@
+<!-- Sidebar HTML -->
+<div class="sidebar">
+  <!-- Sidebar Header -->
+  <div class="sidebar-header text-center py-4">
+    <h5 class="sidebar-title mb-0">
+      <i class="fas fa-bars me-2"></i>Navigation
+    </h5>
+  </div>
+
+  <!-- Sidebar Menu -->
+  <nav class="sidebar-menu">
+    <ul class="nav flex-column">
+      <li *ngFor="let item of menuItems" class="nav-item">
+        <!-- Menu Item with Children -->
+        <div *ngIf="item.children && hasAccess(item)" 
+             class="menu-item-with-children"
+             [class.expanded]="item.expanded">
+          
+          <!-- Parent Item -->
+          <a class="nav-link menu-parent" 
+             href="javascript:void(0)"
+             [class.active]="isActive(item.route || '')"
+             (click)="toggleSubMenu(item)">
+            <span class="menu-icon">
+              <i [class]="item.icon"></i>
+            </span>
+            <span class="menu-title">{{ item.title }}</span>
+            <span class="menu-arrow">
+              <i *ngIf="item.children" 
+                 class="fas fa-chevron-down" 
+                 [class.rotate]="item.expanded"></i>
+            </span>
+          </a>
+          
+          <!-- Children Items -->
+          <ul *ngIf="item.expanded" class="nav flex-column sub-menu">
+            <li *ngFor="let child of item.children" 
+                class="nav-item">
+              <a *ngIf="hasAccess(child)"
+                 class="nav-link menu-child" 
+                 [class.active]="isActive(child.route || '')"
+                 href="javascript:void(0)"
+                 (click)="navigate(child.route || '')">
+                <span class="menu-icon">
+                  <i [class]="child.icon"></i>
+                </span>
+                <span class="menu-title">{{ child.title }}</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+        
+        <!-- Single Menu Item -->
+        <a *ngIf="!item.children && hasAccess(item)"
+           class="nav-link menu-single"
+           [class.active]="isActive(item.route || '')"
+           href="javascript:void(0)"
+           (click)="navigate(item.route || '')">
+          <span class="menu-icon">
+            <i [class]="item.icon"></i>
+          </span>
+          <span class="menu-title">{{ item.title }}</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- Sidebar Footer -->
+  <div class="sidebar-footer mt-auto p-3">
+    <div class="text-center">
+      <small class="text-muted">
+        <i class="fas fa-shield-alt me-1"></i>
+        Secure System v1.0
+      </small>
+    </div>
+  </div>
+</div>

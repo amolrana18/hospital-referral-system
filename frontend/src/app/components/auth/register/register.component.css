@@ -1,0 +1,66 @@
+.register-container {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  min-height: 100vh;
+}
+
+/* Card */
+.register-card {
+  border-radius: 15px;
+  border: none;
+  animation: slideIn 0.4s ease;
+}
+
+.card-header {
+  border-radius: 15px 15px 0 0;
+}
+
+/* Animation */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Inputs */
+.register-container .form-control,
+.register-container .form-select {
+  padding: 12px 14px;
+  border-radius: 8px;
+  border: 2px solid #e0e0e0;
+}
+
+.register-container .form-control:focus,
+.register-container .form-select:focus {
+  border-color: #1a73e8;
+  box-shadow: 0 0 0 0.2rem rgba(26, 115, 232, 0.25);
+}
+
+/* Button */
+.btn-primary {
+  padding: 12px;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+/* Links */
+a {
+  text-decoration: none;
+  font-weight: 500;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* Mobile */
+@media (max-width: 576px) {
+  .register-card {
+    margin: 10px;
+  }
+}
+

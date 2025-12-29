@@ -1,0 +1,317 @@
+<div class="hospital-form-container">
+  <!-- Header -->
+  <div class="header mb-4">
+    <div class="d-flex justify-content-between align-items-center">
+      <div>
+        <h2>{{ isEditMode ? 'Edit Hospital' : 'Add New Hospital' }}</h2>
+        <p class="text-muted mb-0">
+          {{ isEditMode ? 'Update hospital information' : 'Register a new hospital in Uttarakhand' }}
+        </p>
+      </div>
+      <button class="btn btn-outline-secondary" (click)="navigateBack()">
+        <i class="fas fa-arrow-left me-2"></i>Back to List
+      </button>
+    </div>
+  </div>
+
+  <!-- Loading Indicator -->
+  <div *ngIf="loading" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+    <p class="mt-2">Loading hospital data...</p>
+  </div>
+
+  <!-- Hospital Form -->
+  <div *ngIf="!loading" class="card">
+    <div class="card-header">
+      <h5 class="mb-0">Hospital Information</h5>
+    </div>
+    
+    <div class="card-body">
+      <form [formGroup]="hospitalForm" (ngSubmit)="onSubmit()">
+        
+        <!-- Success Message -->
+        <div *ngIf="success" class="alert alert-success alert-dismissible fade show mb-4" role="alert">
+          <i class="fas fa-check-circle me-2"></i>
+          Hospital {{ isEditMode ? 'updated' : 'created' }} successfully! Redirecting...
+          <button type="button" class="btn-close" (click)="success = false"></button>
+        </div>
+
+        <!-- Error Message -->
+        <div *ngIf="error" class="alert alert-danger alert-dismissible fade show mb-4" role="alert">
+          <i class="fas fa-exclamation-circle me-2"></i>
+          {{ error }}
+          <button type="button" class="btn-close" (click)="error = ''"></button>
+        </div>
+
+        <!-- Basic Information -->
+        <h6 class="mb-3 text-primary"><i class="fas fa-info-circle me-2"></i>Basic Information</h6>
+        <div class="row mb-4">
+          <div class="col-md-6 mb-3">
+            <label for="name" class="form-label">Hospital Name *</label>
+            <input type="text" 
+                   id="name"
+                   formControlName="name"
+                   class="form-control"
+                   [class.is-invalid]="submitted && f.name.errors"
+                   placeholder="Enter hospital name">
+            <div *ngIf="submitted && f.name.errors" class="invalid-feedback">
+              Hospital name is required
+            </div>
+          </div>
+
+          <div class="col-md-6 mb-3">
+            <label for="hospital_level" class="form-label">Hospital Level *</label>
+            <select id="hospital_level"
+                    formControlName="hospital_level"
+                    class="form-select"
+                    [class.is-invalid]="submitted && f.hospital_level.errors">
+              <option value="">Select Hospital Level</option>
+              <option *ngFor="let level of hospitalLevels" [value]="level">{{ level }}</option>
+            </select>
+            <div *ngIf="submitted && f.hospital_level.errors" class="invalid-feedback">
+              Hospital level is required
+            </div>
+          </div>
+
+          <div class="col-md-6 mb-3">
+            <label for="type" class="form-label">Hospital Type *</label>
+            <select id="type"
+                    formControlName="type"
+                    class="form-select"
+                    [class.is-invalid]="submitted && f.type.errors">
+              <option value="">Select Hospital Type</option>
+              <option *ngFor="let type of hospitalTypes" [value]="type">{{ type }}</option>
+            </select>
+            <div *ngIf="submitted && f.type.errors" class="invalid-feedback">
+              Hospital type is required
+            </div>
+          </div>
+
+          <div class="col-md-6 mb-3">
+            <label for="established_year" class="form-label">Established Year</label>
+            <input type="text" 
+                   id="established_year"
+                   formControlName="established_year"
+                   class="form-control"
+                   [class.is-invalid]="submitted && f.established_year.errors"
+                   placeholder="YYYY"
+                   maxlength="4">
+            <div *ngIf="submitted && f.established_year.errors" class="invalid-feedback">
+              Enter a valid 4-digit year
+            </div>
+          </div>
+        </div>
+
+        <!-- Location Information -->
+        <h6 class="mb-3 text-primary"><i class="fas fa-map-marker-alt me-2"></i>Location Information</h6>
+        <div class="row mb-4">
+          <div class="col-md-6 mb-3">
+            <label for="district_id" class="form-label">District *</label>
+            <select id="district_id"
+                    formControlName="district_id"
+                    class="form-select"
+                    [class.is-invalid]="submitted && f.district_id.errors">
+              <option value="">Select District</option>
+              <option *ngFor="let district of districts" [value]="district.district_id">
+                {{ district.district_name }}
+              </option>
+            </select>
+            <div *ngIf="submitted && f.district_id.errors" class="invalid-feedback">
+              District is required
+            </div>
+          </div>
+
+          <div class="col-md-6 mb-3">
+            <label for="block_id" class="form-label">Block</label>
+            <select id="block_id"
+                    formControlName="block_id"
+                    class="form-select">
+              <option value="">Select Block</option>
+              <option *ngFor="let block of blocks" [value]="block.block_id">
+                {{ block.block_name }}
+              </option>
+            </select>
+          </div>
+
+          <div class="col-12 mb-3">
+            <label for="address" class="form-label">Full Address *</label>
+            <textarea id="address"
+                      formControlName="address"
+                      class="form-control"
+                      [class.is-invalid]="submitted && f.address.errors"
+                      rows="2"
+                      placeholder="Enter complete address"></textarea>
+            <div *ngIf="submitted && f.address.errors" class="invalid-feedback">
+              Address is required
+            </div>
+          </div>
+
+          <div class="col-md-4 mb-3">
+            <label for="pincode" class="form-label">Pincode *</label>
+            <input type="text" 
+                   id="pincode"
+                   formControlName="pincode"
+                   class="form-control"
+                   [class.is-invalid]="submitted && f.pincode.errors"
+                   placeholder="6-digit pincode"
+                   maxlength="6">
+            <div *ngIf="submitted && f.pincode.errors" class="invalid-feedback">
+              Enter a valid 6-digit pincode
+            </div>
+          </div>
+
+          <div class="col-md-4 mb-3">
+            <label for="latitude" class="form-label">Latitude</label>
+            <input type="text" 
+                   id="latitude"
+                   formControlName="latitude"
+                   class="form-control"
+                   placeholder="e.g., 30.3165">
+          </div>
+
+          <div class="col-md-4 mb-3">
+            <label for="longitude" class="form-label">Longitude</label>
+            <input type="text" 
+                   id="longitude"
+                   formControlName="longitude"
+                   class="form-control"
+                   placeholder="e.g., 78.0322">
+          </div>
+        </div>
+
+        <!-- Contact Information -->
+        <h6 class="mb-3 text-primary"><i class="fas fa-phone me-2"></i>Contact Information</h6>
+        <div class="row mb-4">
+          <div class="col-md-6 mb-3">
+            <label for="contact_number" class="form-label">Contact Number *</label>
+            <input type="text" 
+                   id="contact_number"
+                   formControlName="contact_number"
+                   class="form-control"
+                   [class.is-invalid]="submitted && f.contact_number.errors"
+                   placeholder="10-digit contact number">
+            <div *ngIf="submitted && f.contact_number.errors" class="invalid-feedback">
+              Enter a valid 10-digit contact number
+            </div>
+          </div>
+
+          <div class="col-md-6 mb-3">
+            <label for="emergency_number" class="form-label">Emergency Number *</label>
+            <input type="text" 
+                   id="emergency_number"
+                   formControlName="emergency_number"
+                   class="form-control"
+                   [class.is-invalid]="submitted && f.emergency_number.errors"
+                   placeholder="Emergency contact number">
+            <div *ngIf="submitted && f.emergency_number.errors" class="invalid-feedback">
+              Emergency number is required
+            </div>
+          </div>
+
+          <div class="col-md-6 mb-3">
+            <label for="email" class="form-label">Email Address</label>
+            <input type="email" 
+                   id="email"
+                   formControlName="email"
+                   class="form-control"
+                   [class.is-invalid]="submitted && f.email.errors"
+                   placeholder="hospital@example.com">
+            <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
+              Enter a valid email address
+            </div>
+          </div>
+
+          <div class="col-md-6 mb-3">
+            <label for="website" class="form-label">Website</label>
+            <input type="text" 
+                   id="website"
+                   formControlName="website"
+                   class="form-control"
+                   placeholder="https://example.com">
+          </div>
+        </div>
+
+        <!-- Bed Capacity -->
+        <h6 class="mb-3 text-primary"><i class="fas fa-bed me-2"></i>Bed Capacity</h6>
+        <div class="row mb-4">
+          <div class="col-md-3 mb-3">
+            <label for="bed_capacity" class="form-label">Total Beds *</label>
+            <input type="number" 
+                   id="bed_capacity"
+                   formControlName="bed_capacity"
+                   class="form-control"
+                   [class.is-invalid]="submitted && f.bed_capacity.errors"
+                   min="0"
+                   (blur)="validateBedCounts()">
+            <div *ngIf="submitted && f.bed_capacity.errors" class="invalid-feedback">
+              <div *ngIf="f.bed_capacity.errors.required">Total beds is required</div>
+              <div *ngIf="f.bed_capacity.errors.min">Enter a valid number</div>
+            </div>
+          </div>
+
+          <div class="col-md-3 mb-3">
+            <label for="operational_beds" class="form-label">Operational Beds *</label>
+            <input type="number" 
+                   id="operational_beds"
+                   formControlName="operational_beds"
+                   class="form-control"
+                   [class.is-invalid]="submitted && f.operational_beds.errors"
+                   min="0"
+                   (blur)="validateBedCounts()">
+            <div *ngIf="submitted && f.operational_beds.errors" class="invalid-feedback">
+              <div *ngIf="f.operational_beds.errors.required">Operational beds is required</div>
+              <div *ngIf="f.operational_beds.errors.min">Enter a valid number</div>
+              <div *ngIf="f.operational_beds.errors.exceedsCapacity">Cannot exceed total beds</div>
+            </div>
+          </div>
+
+          <div class="col-md-3 mb-3">
+            <label for="icu_beds" class="form-label">ICU Beds *</label>
+            <input type="number" 
+                   id="icu_beds"
+                   formControlName="icu_beds"
+                   class="form-control"
+                   [class.is-invalid]="submitted && f.icu_beds.errors"
+                   min="0">
+            <div *ngIf="submitted && f.icu_beds.errors" class="invalid-feedback">
+              <div *ngIf="f.icu_beds.errors.required">ICU beds is required</div>
+              <div *ngIf="f.icu_beds.errors.min">Enter a valid number</div>
+            </div>
+          </div>
+
+          <div class="col-md-3 mb-3">
+            <label for="ventilator_beds" class="form-label">Ventilator Beds *</label>
+            <input type="number" 
+                   id="ventilator_beds"
+                   formControlName="ventilator_beds"
+                   class="form-control"
+                   [class.is-invalid]="submitted && f.ventilator_beds.errors"
+                   min="0">
+            <div *ngIf="submitted && f.ventilator_beds.errors" class="invalid-feedback">
+              <div *ngIf="f.ventilator_beds.errors.required">Ventilator beds is required</div>
+              <div *ngIf="f.ventilator_beds.errors.min">Enter a valid number</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Form Actions -->
+        <div class="d-flex justify-content-end gap-3 mt-4">
+          <button type="button" 
+                  class="btn btn-outline-secondary"
+                  (click)="navigateBack()">
+            Cancel
+          </button>
+          <button type="submit" 
+                  class="btn btn-primary"
+                  [disabled]="loading">
+            <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
+            <i class="fas fa-save me-2"></i>
+            {{ isEditMode ? 'Update Hospital' : 'Create Hospital' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

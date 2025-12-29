@@ -1,0 +1,54 @@
+<div class="real-time-updates-container">
+  <div class="header mb-4">
+    <div class="d-flex justify-content-between align-items-center">
+      <div>
+        <h2>Real-time Updates</h2>
+        <p class="text-muted mb-0">Live updates from across the system</p>
+      </div>
+      <div class="btn-group">
+        <button class="btn btn-primary" (click)="markAllAsRead()">Mark All as Read</button>
+        <button class="btn btn-outline-danger" (click)="clearAllUpdates()">Clear All</button>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="loading" class="text-center py-5">
+    <div class="spinner-border text-primary"></div>
+    <p class="mt-2">Loading updates...</p>
+  </div>
+
+  <div *ngIf="!loading" class="updates-feed">
+    <div *ngFor="let update of updates" class="update-card">
+      <div class="update-header">
+        <div class="d-flex justify-content-between align-items-start">
+          <div class="d-flex align-items-center">
+            <div class="update-icon me-3">
+              <i [class]="getUpdateIcon(update.type)" [ngClass]="getUpdateColor(update.type)"></i>
+            </div>
+            <div>
+              <h6 class="update-title mb-1">{{ update.title }}</h6>
+              <small class="text-muted">
+                <i class="fas fa-clock me-1"></i>{{ getTimeAgo(update.time) }}
+              </small>
+            </div>
+          </div>
+          <span class="badge" [ngClass]="getPriorityBadgeClass(update.priority)">{{ update.priority }}</span>
+        </div>
+      </div>
+      
+      <div class="update-body">
+        <p class="update-message">{{ update.message }}</p>
+        <div class="update-actions mt-3">
+          <button class="btn btn-sm btn-outline-primary me-2">View</button>
+          <button class="btn btn-sm btn-outline-secondary">Flag</button>
+        </div>
+      </div>
+    </div>
+    
+    <div *ngIf="updates.length === 0" class="text-center py-5">
+      <i class="fas fa-bell-slash fa-3x text-muted mb-3"></i>
+      <h5 class="text-muted">No updates available</h5>
+      <p class="text-muted">System updates will appear here in real-time</p>
+    </div>
+  </div>
+</div>

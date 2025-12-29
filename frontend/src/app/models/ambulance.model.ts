@@ -1,0 +1,32 @@
+export interface Ambulance {
+  ambulance_id: number;
+  hospital_id?: number;
+  district_id: number;
+  vehicle_number: string;
+  ambulance_type: 'Basic' | 'Advanced' | 'Mobile ICU' | 'Neonatal' | 'Cardiac' | 'Air Ambulance' | 'Water Ambulance' | 'Maternity';
+  manufacturer?: string;
+  model?: string;
+  year_of_manufacture?: number;
+  is_active: boolean;
+  current_status: 'Available' | 'On-Duty' | 'Maintenance' | 'Offline' | 'Fuel Refill' | 'Cleaning';
+  driver_staff_id?: number;
+  paramedic_staff_id?: number;
+  nurse_staff_id?: number;
+  equipped_with_oxygen: boolean;
+  equipped_ventilator: boolean;
+  equipped_defibrillator: boolean;
+  equipped_monitor: boolean;
+  equipped_suction: boolean;
+  gps_latitude?: number;
+  gps_longitude?: number;
+  last_location_update?: string;
+  base_station?: string;
+  contact_number?: string;
+  insurance_valid_until?: string;
+  fitness_certificate_until?: string;
+  district_name?: string;
+  stationed_hospital?: string;
+  driver_name?: string;
+  driver_phone?: string;
+  minutes_since_last_update?: number;
+}

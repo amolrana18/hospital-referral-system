@@ -1,0 +1,153 @@
+.bed-status-container {
+  min-height: calc(100vh - 180px);
+}
+
+.header {
+  background: white;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.filters-card {
+  border-radius: 10px;
+  border: none;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.filters-card .form-label {
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.stat-card {
+  border-radius: 10px;
+  border: none;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  transition: transform 0.3s;
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+}
+
+.stat-card h6 {
+  font-size: 14px;
+}
+
+.stat-card h3 {
+  font-weight: 700;
+  margin-bottom: 0;
+}
+
+.bed-status-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.bed-status-card {
+  background: white;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  transition: all 0.3s;
+  border: 1px solid #eee;
+}
+
+.bed-status-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+  border-color: #1a73e8;
+}
+
+.hospital-header {
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+}
+
+.hospital-name {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 5px;
+  font-size: 16px;
+}
+
+.hospital-header small {
+  font-size: 12px;
+}
+
+.stat-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  padding: 6px 0;
+  border-bottom: 1px solid #f8f9fa;
+}
+
+.stat-row:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.stat-label {
+  font-size: 13px;
+  color: #666;
+}
+
+.stat-value {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.occupancy-meter .progress {
+  border-radius: 10px;
+  background-color: #e9ecef;
+}
+
+.occupancy-meter .progress-bar {
+  border-radius: 10px;
+}
+
+.status-indicator .badge {
+  font-size: 12px;
+  padding: 6px 10px;
+}
+
+.hospital-actions .btn {
+  padding: 8px 16px;
+  font-size: 14px;
+}
+
+@media (max-width: 768px) {
+  .header {
+    padding: 15px;
+  }
+  
+  .filters-card .col-md-3,
+  .filters-card .col-md-4,
+  .filters-card .col-md-2 {
+    margin-bottom: 15px;
+  }
+  
+  .bed-status-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .bed-status-card {
+    margin-bottom: 15px;
+  }
+  
+  .btn-group {
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .btn-group .btn {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+}

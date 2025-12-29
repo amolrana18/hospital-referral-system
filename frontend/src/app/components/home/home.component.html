@@ -1,0 +1,514 @@
+<div class="home-container">
+  <!-- Floating Particles Background -->
+  <div class="particles-bg"></div>
+  
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="hero-overlay"></div>
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-lg-6">
+          <div class="hero-badge"> Healthcare Excellence</div>
+          <h1 class="hero-title">Hospital Referral System</h1>
+          <p class="hero-subtitle">Uttarakhand's Centralized Healthcare Network</p>
+          <p class="hero-description">
+            A real-time platform connecting hospitals across Uttarakhand for efficient patient referrals, 
+            resource management, and coordinated emergency response.
+          </p>
+          <div class="hero-buttons">
+            <h4 class="login-options-title mb-4">Choose Your Login Type</h4>
+            <div class="login-options">
+              <button class="btn btn-primary btn-lg login-option-btn" (click)="navigateToLogin('super-admin')">
+                <i class="fas fa-crown"></i>
+                <span>Super Admin</span>
+              </button>
+              <button class="btn btn-success btn-lg login-option-btn" (click)="navigateToLogin('hospital-admin')">
+                <i class="fas fa-hospital-user"></i>
+                <span>Hospital Admin</span>
+              </button>
+              <button class="btn btn-info btn-lg login-option-btn" (click)="navigateToLogin('user')">
+                <i class="fas fa-user"></i>
+                <span>User</span>
+              </button>
+            </div>
+            <div class="register-section mt-4">
+              <p class="register-text">Don't have an account?</p>
+              <button class="btn btn-outline-light btn-lg" (click)="navigateToRegister()">
+                <i class="fas fa-user-plus"></i> Register
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="hero-image">
+            <div class="image-glow"></div>
+            <img src="assets/images/medilink-logo.png" alt="Hospital Referral System" class="img-fluid" id="photo">
+           
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features-section py-5 bg-light">
+    <div class="container">
+      <div class="section-header text-center mb-5">
+        <h2 class="section-title">Key Features</h2>
+        <p class="section-subtitle">Discover what makes MediLink the perfect healthcare solution</p>
+      </div>
+      <div class="row">
+        <div class="col-md-4 mb-4">
+          <div class="feature-card text-center p-4" data-aos="fade-up" data-aos-delay="100">
+            <div class="feature-icon-wrapper">
+              <div class="feature-icon mb-3">
+                <i class="fas fa-hospital fa-3x"></i>
+              </div>
+              <div class="feature-number">  </div>
+            </div>
+            <h4 class="feature-title">Real-Time Bed Monitoring</h4>
+            <p class="feature-description">
+              Track bed availability across all hospitals in Uttarakhand in real-time
+            </p>
+            <div class="feature-link">
+              <span>Learn More <i class="fas fa-arrow-right"></i></span>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 mb-4">
+          <div class="feature-card text-center p-4" data-aos="fade-up" data-aos-delay="200">
+            <div class="feature-icon-wrapper">
+              <div class="feature-icon mb-3">
+                <i class="fas fa-ambulance fa-3x"></i>
+              </div>
+              <div class="feature-number"></div>
+            </div>
+            <h4 class="feature-title">Smart Referral System</h4>
+            <p class="feature-description">
+              Efficient patient transfer between hospitals based on resource availability
+            </p>
+            <div class="feature-link">
+              <span>Learn More <i class="fas fa-arrow-right"></i></span>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 mb-4">
+          <div class="feature-card text-center p-4" data-aos="fade-up" data-aos-delay="300">
+            <div class="feature-icon-wrapper">
+              <div class="feature-icon mb-3">
+                <i class="fas fa-chart-line fa-3x"></i>
+              </div>
+              <div class="feature-number"></div>
+            </div>
+            <h4 class="feature-title">Analytics Dashboard</h4>
+            <p class="feature-description">
+              Comprehensive analytics and reporting for healthcare administrators
+            </p>
+            <div class="feature-link">
+              <span>Learn More <i class="fas fa-arrow-right"></i></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats Section -->
+  <section class="stats-section py-5">
+    <div class="stats-overlay"></div>
+    <div class="container">
+      <div class="row text-center">
+        <div class="col-12 mb-5">
+          <h2 class="stats-title">Our Impact in Numbers</h2>
+          <p class="stats-subtitle">Making healthcare accessible across Uttarakhand</p>
+        </div>
+      </div>
+      
+      <!-- Loading State -->
+      <div *ngIf="isLoading" class="row text-center">
+        <div class="col-12">
+          <div class="loading-spinner"></div>
+          <p class="text-white mt-3">Loading real-time statistics...</p>
+        </div>
+      </div>
+      
+      <!-- Statistics Data -->
+      <div *ngIf="!isLoading" class="row text-center">
+        <div class="col-md-3 mb-4" *ngFor="let stat of statistics; let i = index">
+          <div class="stat-item" data-aos="zoom-in" [attr.data-aos-delay]="(i + 1) * 100">
+            <div class="stat-icon">{{ stat.icon }}</div>
+            <div class="stat-number counter" [attr.data-target]="stat.value">0</div>
+            <div class="stat-label">{{ stat.label }}</div>
+            <div class="stat-progress">
+              <div class="progress-bar" [attr.data-width]="stat.progressWidth"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+<!-- FAQ Toggle Button -->
+<div class="text-center my-4">
+  <button class="btn btn-outline-primary faq-toggle-btn" (click)="toggleFaq()">
+    <i class="fas" [ngClass]="showFaq ? 'fa-times' : 'fa-question-circle'"></i>
+    {{ showFaq ? 'Close FAQ' : 'Open FAQ' }}
+  </button>
+</div>
+
+  <!-- About Section -->
+<section class="about-section py-5 bg-light">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-lg-6" data-aos="fade-right">
+          <div class="about-badge">✨ Innovation in Healthcare</div>
+          <h2 class="section-title mb-4">About MediLink</h2>
+          <p class="about-description mb-4">
+            MediLink is Uttarakhand's pioneering healthcare coordination platform that bridges the gap between hospitals,
+            ensuring seamless patient care and optimal resource utilization across the state.
+          </p>
+          <div class="about-features">
+            <div class="about-feature-item">
+              <div class="feature-check">✓</div>
+              <div class="feature-content">
+                <h5>Centralized Patient Referral System</h5>
+                <p>Streamlined patient transfers with real-time coordination</p>
+              </div>
+            </div>
+            <div class="about-feature-item">
+              <div class="feature-check">✓</div>
+              <div class="feature-content">
+                <h5>Real-time Bed and Resource Tracking</h5>
+                <p>Live updates on hospital capacity and resource availability</p>
+              </div>
+            </div>
+            <div class="about-feature-item">
+              <div class="feature-check">✓</div>
+              <div class="feature-content">
+                <h5>Emergency Response Coordination</h5>
+                <p>Rapid response system for critical medical emergencies</p>
+              </div>
+            </div>
+            <div class="about-feature-item">
+              <div class="feature-check">✓</div>
+              <div class="feature-content">
+                <h5>Comprehensive Analytics and Reporting</h5>
+                <p>Data-driven insights for better healthcare management</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6" data-aos="fade-left">
+          <div class="about-image">
+            <div class="image-decoration"></div>
+            <img src="assets/images/medpoto.png" alt="MediLink Healthcare Platform" class="img-fluid rounded shadow">
+            <div class="about-stats-mini">
+              <div class="mini-stat">
+                <span class="mini-number">24/7</span>
+                <span class="mini-label">Support</span>
+              </div>
+              <div class="mini-stat">
+                <span class="mini-number">100%</span>
+                <span class="mini-label">Secure</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ Section -->
+<section class="faq-section py-5 bg-light">
+  <div class="container">
+    <div class="section-header text-center mb-5">
+      <div class="faq-badge">💡 Help Center</div>
+      <h2 class="section-title">Frequently Asked Questions</h2>
+      <p class="section-subtitle">Find quick answers to common questions about MediLink</p>
+    </div>
+    
+    <div class="row">
+      <div class="col-lg-8 mx-auto">
+        <div class="accordion" id="faqAccordion">
+          
+          <!-- FAQ Item 1 -->
+          <div class="faq-item">
+            <div class="faq-header" id="faqHeading1">
+              <h5 class="mb-0">
+                <button class="faq-btn" type="button" data-bs-toggle="collapse" 
+                        data-bs-target="#faqCollapse1" aria-expanded="true" 
+                        aria-controls="faqCollapse1">
+                  <span class="faq-number">01</span>
+                  <span class="faq-question">What is the Hospital Referral System?</span>
+                  <span class="faq-icon">
+                    <i class="fas fa-plus"></i>
+                    <i class="fas fa-minus"></i>
+                  </span>
+                </button>
+              </h5>
+            </div>
+            <div id="faqCollapse1" class="collapse show" 
+                 aria-labelledby="faqHeading1" data-bs-parent="#faqAccordion">
+              <div class="faq-body">
+                MediLink is Uttarakhand's centralized digital platform that connects all hospitals for real-time bed tracking, efficient patient referrals, and emergency coordination between healthcare facilities.
+              </div>
+            </div>
+          </div>
+
+          <!-- FAQ Item 2 -->
+          <div class="faq-item">
+            <div class="faq-header" id="faqHeading2">
+              <h5 class="mb-0">
+                <button class="faq-btn collapsed" type="button" data-bs-toggle="collapse" 
+                        data-bs-target="#faqCollapse2" aria-expanded="false" 
+                        aria-controls="faqCollapse2">
+                  <span class="faq-number">02</span>
+                  <span class="faq-question">Who can use this system?</span>
+                  <span class="faq-icon">
+                    <i class="fas fa-plus"></i>
+                    <i class="fas fa-minus"></i>
+                  </span>
+                </button>
+              </h5>
+            </div>
+            <div id="faqCollapse2" class="collapse" 
+                 aria-labelledby="faqHeading2" data-bs-parent="#faqAccordion">
+              <div class="faq-body">
+                The system is designed for hospital administrators, doctors, nursing staff, ambulance services, and government health officials. Each role has specific access permissions based on responsibilities.
+              </div>
+            </div>
+          </div>
+
+          <!-- FAQ Item 3 -->
+          <div class="faq-item">
+            <div class="faq-header" id="faqHeading3">
+              <h5 class="mb-0">
+                <button class="faq-btn collapsed" type="button" data-bs-toggle="collapse" 
+                        data-bs-target="#faqCollapse3" aria-expanded="false" 
+                        aria-controls="faqCollapse3">
+                  <span class="faq-number">03</span>
+                  <span class="faq-question">How do I refer a patient to another hospital?</span>
+                  <span class="faq-icon">
+                    <i class="fas fa-plus"></i>
+                    <i class="fas fa-minus"></i>
+                  </span>
+                </button>
+              </h5>
+            </div>
+            <div id="faqCollapse3" class="collapse" 
+                 aria-labelledby="faqHeading3" data-bs-parent="#faqAccordion">
+              <div class="faq-body">
+                Login → Go to "Referrals" → "New Referral" → Select patient → Choose receiving hospital → Provide clinical details → Submit. The system automatically notifies the receiving hospital.
+              </div>
+            </div>
+          </div>
+
+          <!-- FAQ Item 4 -->
+          <div class="faq-item">
+            <div class="faq-header" id="faqHeading4">
+              <h5 class="mb-0">
+                <button class="faq-btn collapsed" type="button" data-bs-toggle="collapse" 
+                        data-bs-target="#faqCollapse4" aria-expanded="false" 
+                        aria-controls="faqCollapse4">
+                  <span class="faq-number">04</span>
+                  <span class="faq-question">How often should bed availability be updated?</span>
+                  <span class="faq-icon">
+                    <i class="fas fa-plus"></i>
+                    <i class="fas fa-minus"></i>
+                  </span>
+                </button>
+              </h5>
+            </div>
+            <div id="faqCollapse4" class="collapse" 
+                 aria-labelledby="faqHeading4" data-bs-parent="#faqAccordion">
+              <div class="faq-body">
+                Every 6 hours minimum, or immediately when changes occur. Emergency situations require instant updates to ensure accurate real-time information.
+              </div>
+            </div>
+          </div>
+
+          <!-- FAQ Item 5 -->
+          <div class="faq-item">
+            <div class="faq-header" id="faqHeading5">
+              <h5 class="mb-0">
+                <button class="faq-btn collapsed" type="button" data-bs-toggle="collapse" 
+                        data-bs-target="#faqCollapse5" aria-expanded="false" 
+                        aria-controls="faqCollapse5">
+                  <span class="faq-number">05</span>
+                  <span class="faq-question">How real-time is the bed availability information?</span>
+                  <span class="faq-icon">
+                    <i class="fas fa-plus"></i>
+                    <i class="fas fa-minus"></i>
+                  </span>
+                </button>
+              </h5>
+            </div>
+            <div id="faqCollapse5" class="collapse" 
+                 aria-labelledby="faqHeading5" data-bs-parent="#faqAccordion">
+              <div class="faq-body">
+                Information updates immediately when hospitals submit changes. The system shows "last updated" timestamps and uses color coding (Green/Red) to indicate data freshness.
+              </div>
+            </div>
+          </div>
+
+          <!-- FAQ Item 6 -->
+          <div class="faq-item">
+            <div class="faq-header" id="faqHeading6">
+              <h5 class="mb-0">
+                <button class="faq-btn collapsed" type="button" data-bs-toggle="collapse" 
+                        data-bs-target="#faqCollapse6" aria-expanded="false" 
+                        aria-controls="faqCollapse6">
+                  <span class="faq-number">06</span>
+                  <span class="faq-question">What happens if the system goes offline?</span>
+                  <span class="faq-icon">
+                    <i class="fas fa-plus"></i>
+                    <i class="fas fa-minus"></i>
+                  </span>
+                </button>
+              </h5>
+            </div>
+            <div id="faqCollapse6" class="collapse" 
+                 aria-labelledby="faqHeading6" data-bs-parent="#faqAccordion">
+              <div class="faq-body">
+                Emergency protocols activate immediately. Contact numbers remain accessible, manual referral forms are available, and the system automatically syncs data when back online.
+              </div>
+            </div>
+          </div>
+
+          <!-- FAQ Item 7 -->
+          <div class="faq-item">
+            <div class="faq-header" id="faqHeading7">
+              <h5 class="mb-0">
+                <button class="faq-btn collapsed" type="button" data-bs-toggle="collapse" 
+                        data-bs-target="#faqCollapse7" aria-expanded="false" 
+                        aria-controls="faqCollapse7">
+                  <span class="faq-number">07</span>
+                  <span class="faq-question">How is patient data protected?</span>
+                  <span class="faq-icon">
+                    <i class="fas fa-plus"></i>
+                    <i class="fas fa-minus"></i>
+                  </span>
+                </button>
+              </h5>
+            </div>
+            <div id="faqCollapse7" class="collapse" 
+                 aria-labelledby="faqHeading7" data-bs-parent="#faqAccordion">
+              <div class="faq-body">
+                End-to-end encryption, role-based access control, HIPAA-compliant standards, regular security audits, and strict access logs ensure complete patient data protection.
+              </div>
+            </div>
+          </div>
+
+          <!-- FAQ Item 8 -->
+          <div class="faq-item">
+            <div class="faq-header" id="faqHeading8">
+              <h5 class="mb-0">
+                <button class="faq-btn collapsed" type="button" data-bs-toggle="collapse" 
+                        data-bs-target="#faqCollapse8" aria-expanded="false" 
+                        aria-controls="faqCollapse8">
+                  <span class="faq-number">08</span>
+                  <span class="faq-question">What support is available if I face issues?</span>
+                  <span class="faq-icon">
+                    <i class="fas fa-plus"></i>
+                    <i class="fas fa-minus"></i>
+                  </span>
+                </button>
+              </h5>
+            </div>
+            <div id="faqCollapse8" class="collapse" 
+                 aria-labelledby="faqHeading8" data-bs-parent="#faqAccordion">
+              <div class="faq-body">
+                24/7 helpdesk (1800-XXX-XXXX), email support, WhatsApp assistance, online tutorials, and dedicated district coordinators for on-site help.
+              </div>
+            </div>
+          </div>
+
+          <!-- FAQ Item 9 -->
+          <div class="faq-item">
+            <div class="faq-header" id="faqHeading9">
+              <h5 class="mb-0">
+                <button class="faq-btn collapsed" type="button" data-bs-toggle="collapse" 
+                        data-bs-target="#faqCollapse9" aria-expanded="false" 
+                        aria-controls="faqCollapse9">
+                  <span class="faq-number">09</span>
+                  <span class="faq-question">How long does referral approval take?</span>
+                  <span class="faq-icon">
+                    <i class="fas fa-plus"></i>
+                    <i class="fas fa-minus"></i>
+                  </span>
+                </button>
+              </h5>
+            </div>
+            <div id="faqCollapse9" class="collapse" 
+                 aria-labelledby="faqHeading9" data-bs-parent="#faqAccordion">
+              <div class="faq-body">
+                Emergency/Critical: 15 minutes, Urgent: 30 minutes, Routine: 2 hours. The system prioritizes based on severity and sends automatic reminders.
+              </div>
+            </div>
+          </div>
+
+          <!-- FAQ Item 10 -->
+          <div class="faq-item">
+            <div class="faq-header" id="faqHeading10">
+              <h5 class="mb-0">
+                <button class="faq-btn collapsed" type="button" data-bs-toggle="collapse" 
+                        data-bs-target="#faqCollapse10" aria-expanded="false" 
+                        aria-controls="faqCollapse10">
+                  <span class="faq-number">10</span>
+                  <span class="faq-question">Is training provided for using the system?</span>
+                  <span class="faq-icon">
+                    <i class="fas fa-plus"></i>
+                    <i class="fas fa-minus"></i>
+                  </span>
+                </button>
+              </h5>
+            </div>
+            <div id="faqCollapse10" class="collapse" 
+                 aria-labelledby="faqHeading10" data-bs-parent="#faqAccordion">
+              <div class="faq-body">
+                Yes - video tutorials, live webinars, in-person sessions at district hospitals, comprehensive user manuals, and ongoing support during implementation.
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- FAQ Contact Card -->
+        <div class="faq-contact-card mt-5">
+          <div class="row align-items-center">
+            <div class="col-md-8">
+              <h5 class="mb-2">Still have questions?</h5>
+              <p class="mb-0 text-muted">Contact our support team for personalized assistance</p>
+            </div>
+            <div class="col-md-4 text-md-end">
+              <button class="btn btn-primary" (click)="navigateToContact()">
+                <i class="fas fa-headset me-2"></i>Contact Support
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+  <!-- CTA Section -->
+  <section class="cta-section py-5">
+    <div class="cta-particles"></div>
+    <div class="container text-center">
+      <div class="cta-content" data-aos="zoom-in">
+        <div class="cta-icon">🚀</div>
+        <h2 class="cta-title mb-4">Ready to Join the Network?</h2>
+        <p class="cta-description mb-4">
+          Connect your hospital to Uttarakhand's largest healthcare coordination platform and improve patient outcomes.
+        </p>
+        <div class="cta-buttons">
+          <button class="btn cta-btn primary-btn" (click)="navigateToRegister()">
+            <i class="fas fa-rocket"></i> Get Started Now
+          </button>
+          <button class="btn cta-btn secondary-btn ml-3">
+            <i class="fas fa-play"></i> Watch Demo
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

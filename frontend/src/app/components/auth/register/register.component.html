@@ -1,0 +1,199 @@
+<div class="register-container">
+  <div class="container">
+    <div class="row justify-content-center align-items-center min-vh-100">
+      <div class="col-11 col-sm-10 col-md-8 col-lg-6">
+
+        <div class="card register-card shadow-lg">
+          <!-- Header -->
+          <div class="card-header bg-primary text-white text-center py-4">
+            <h3 class="mb-1">Create Account</h3>
+            <p class="mb-0 opacity-75">
+              Register for Hospital Referral System
+            </p>
+          </div>
+
+          <!-- Body -->
+          <div class="card-body p-4">
+            <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+
+              <div *ngIf="error" class="alert alert-danger">
+                {{ error }}
+              </div>
+
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="First Name"
+                    formControlName="first_name"
+                    [class.is-invalid]="submitted && f.first_name.errors"
+                  />
+                  <div class="invalid-feedback">
+                    First name is required
+                  </div>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Last Name"
+                    formControlName="last_name"
+                    [class.is-invalid]="submitted && f.last_name.errors"
+                  />
+                  <div class="invalid-feedback">
+                    Last name is required
+                  </div>
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <input
+                  type="email"
+                  class="form-control"
+                  placeholder="Email Address"
+                  formControlName="email"
+                  [class.is-invalid]="submitted && f.email.errors"
+                />
+                <div class="invalid-feedback">
+                  Valid email is required
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <input
+                  type="tel"
+                  class="form-control"
+                  placeholder="Phone Number"
+                  formControlName="phone"
+                  [class.is-invalid]="submitted && f.phone.errors"
+                />
+                <div class="invalid-feedback">
+                  Valid phone number is required
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <input
+                    type="date"
+                    class="form-control"
+                    placeholder="Date of Birth"
+                    formControlName="date_of_birth"
+                    [class.is-invalid]="submitted && f.date_of_birth.errors"
+                  />
+                  <div class="invalid-feedback">
+                    Date of birth is required
+                  </div>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <select
+                    class="form-select"
+                    formControlName="gender"
+                    [class.is-invalid]="submitted && f.gender.errors">
+                    <option value="">Select Gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                  </select>
+                  <div class="invalid-feedback">
+                    Gender is required
+                  </div>
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <select
+                  class="form-select"
+                  formControlName="user_role"
+                  [class.is-invalid]="submitted && f.user_role.errors">
+                  <option value="">Select Role</option>
+                  <option *ngFor="let role of userRoles" [value]="role">{{ role }}</option>
+                </select>
+                <div class="invalid-feedback">
+                  Role is required
+                </div>
+              </div>
+
+              <!-- Hospital Selection for Staff -->
+              <div *ngIf="showStaffFields" class="mb-3">
+                <select
+                  class="form-select"
+                  formControlName="hospital_id"
+                  [class.is-invalid]="submitted && f.hospital_id.errors">
+                  <option value="">Select Hospital ({{ hospitals.length }} available)</option>
+                  <option *ngFor="let hospital of hospitals" [value]="hospital.hospital_id">{{ hospital.name }}</option>
+                </select>
+                <div class="invalid-feedback">
+                  Hospital is required for staff members
+                </div>
+              </div>
+
+              <!-- Staff Fields -->
+              <div *ngIf="showStaffFields" class="row">
+                <div class="col-md-6 mb-3">
+                  <select
+                    class="form-select"
+                    formControlName="designation"
+                    [class.is-invalid]="submitted && f.designation.errors">
+                    <option value="">Select Designation</option>
+                    <option *ngFor="let designation of designations" [value]="designation">{{ designation }}</option>
+                  </select>
+                  <div class="invalid-feedback">
+                    Designation is required
+                  </div>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <select
+                    class="form-select"
+                    formControlName="department"
+                    [class.is-invalid]="submitted && f.department.errors">
+                    <option value="">Select Department</option>
+                    <option *ngFor="let department of departments" [value]="department">{{ department }}</option>
+                  </select>
+                  <div class="invalid-feedback">
+                    Department is required
+                  </div>
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <input
+                  type="password"
+                  class="form-control"
+                  placeholder="Password"
+                  formControlName="password"
+                  [class.is-invalid]="submitted && f.password.errors"
+                />
+                <div class="invalid-feedback">
+                  Minimum 6 characters required
+                </div>
+              </div>
+
+              <button
+                type="submit"
+                class="btn btn-primary w-100"
+                [disabled]="loading">
+                <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
+                Register
+              </button>
+
+            </form>
+          </div>
+
+          <!-- Footer -->
+          <div class="card-footer text-center">
+            <p class="mb-0">
+              Already have an account?
+              <a routerLink="/login">Sign In</a>
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

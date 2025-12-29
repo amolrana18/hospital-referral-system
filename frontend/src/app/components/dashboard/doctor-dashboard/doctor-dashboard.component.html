@@ -1,0 +1,140 @@
+<!-- Doctor Dashboard HTML -->
+<div class="doctor-dashboard">
+  <!-- Dashboard Header -->
+  <div class="dashboard-header mb-4">
+    <div class="d-flex justify-content-between align-items-start">
+      <div>
+        <h2 class="mb-1">Doctor Dashboard</h2>
+        <p class="text-muted mb-0">{{ displayHospitalName }} - Manage your patients, referrals, and appointments</p>
+        <small class="text-info">Welcome, {{ currentUser?.name || currentUser?.fullName || 'Doctor' }}</small>
+      </div>
+      <div class="btn-group">
+        <button class="btn btn-primary" (click)="refreshDashboard()">
+          <i class="fas fa-sync-alt"></i> Refresh
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading Indicator -->
+  <div *ngIf="loading" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+    <p class="mt-2">Loading dashboard data...</p>
+  </div>
+
+  <!-- Dashboard Content -->
+  <div *ngIf="!loading" class="dashboard-content">
+    <!-- Quick Actions -->
+    <div class="row mb-4">
+      <div class="col-md-4 mb-3">
+        <div class="card quick-action-card">
+          <div class="card-body text-center">
+            <div class="action-icon mb-3">
+              <i class="fas fa-user-plus fa-3x text-primary"></i>
+            </div>
+            <h5 class="card-title">New Patient</h5>
+            <p class="card-text text-muted small">Register a new patient in the system</p>
+            <button class="btn btn-primary w-100" (click)="navigateToNewPatient()">
+              <i class="fas fa-plus me-1"></i> Add Patient
+            </button>
+            <div class="mt-2">
+              <button class="btn btn-outline-info btn-sm w-100" (click)="navigateToPatientSearch()">
+                <i class="fas fa-search me-1"></i> Search Patients
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4 mb-3">
+        <div class="card quick-action-card">
+          <div class="card-body text-center">
+            <div class="action-icon mb-3">
+              <i class="fas fa-ambulance fa-3x text-danger"></i>
+            </div>
+            <h5 class="card-title">New Referral</h5>
+            <p class="card-text text-muted small">Refer a patient to another hospital</p>
+            <button class="btn btn-danger w-100" (click)="navigateToNewReferral()">
+              <i class="fas fa-plus me-1"></i> Create Referral
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4 mb-3">
+        <div class="card quick-action-card">
+          <div class="card-body text-center">
+            <div class="action-icon mb-3">
+              <i class="fas fa-bed fa-3x text-success"></i>
+            </div>
+            <h5 class="card-title">Bed Status</h5>
+            <p class="card-text text-muted small">Check real-time bed availability</p>
+            <button class="btn btn-success w-100" (click)="navigateToBedStatus()">
+              <i class="fas fa-eye me-1"></i> View Status
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Statistics & Appointments -->
+    <div class="row mb-4">
+      <!-- Statistics -->
+      <div class="col-md-8">
+        <div class="card h-100">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">Referral Statistics</h5>
+            <button class="btn btn-sm btn-primary" (click)="navigateToReferrals()">
+              <i class="fas fa-external-link-alt me-1"></i> View All
+            </button>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-4 mb-3">
+                <div class="text-center">
+                  <h3 class="text-primary">{{ stats.total_referrals }}</h3>
+                  <small class="text-muted">Total Referrals</small>
+                </div>
+              </div>
+              <div class="col-4 mb-3">
+                <div class="text-center">
+                  <h3 class="text-warning">{{ stats.pending_referrals }}</h3>
+                  <small class="text-muted">Pending</small>
+                </div>
+              </div>
+              <div class="col-4 mb-3">
+                <div class="text-center">
+                  <h3 class="text-success">{{ stats.completed_referrals }}</h3>
+                  <small class="text-muted">Completed</small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bed Availability -->
+      <div class="col-md-4">
+        <div class="card h-100">
+          <div class="card-header">
+            <h5 class="mb-0">Bed Availability</h5>
+          </div>
+          <div class="card-body text-center">
+            <div class="bed-availability mb-4">
+              <div class="bed-count">
+                <h1 class="display-4 text-primary">{{ bedAvailability.available_beds }}</h1>
+                <p class="text-muted mb-0">General Beds Available</p>
+              </div>
+              <div class="icu-count mt-4">
+                <h2 class="text-danger">{{ bedAvailability.available_icu }}</h2>
+                <p class="text-muted mb-0">ICU Beds Available</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
